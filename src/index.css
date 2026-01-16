@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+#root {
+  --purple-100: hsla(240, 58%, 85%, 0.331);
+  --purple-200: hsl(239, 57%, 85%);
+  --purple-400: hsl(239, 64%, 73%);
+  --purple-600: hsl(238, 40%, 52%);
+  --bg-color: hsl(240, 19%, 92%);
+}
