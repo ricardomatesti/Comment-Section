@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-export const useIsTextClamped = () => {
+export const useIsTextClamped = (text: string) => {
   const textRef = useRef<HTMLSpanElement>(null);
   const [isClamped, setIsClamped] = useState(false);
 
@@ -14,7 +14,7 @@ export const useIsTextClamped = () => {
 
   useEffect(() => {
     checkOverflow();
-  }, []);
+  }, [text]);
 
   return {
     isClamped,

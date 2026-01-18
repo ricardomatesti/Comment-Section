@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <main className="w-full flex flex-row justify-center items-center">
-        <div className="max-w-200 flex-initial w-full h-full flex flex-col gap-4 m-4">
+        <div className="max-w-200 flex-initial w-full h-[100vh] flex flex-col justify-between gap-4 mx-4">
           <CommentSection></CommentSection>
 
           <AddCommentSection></AddCommentSection>

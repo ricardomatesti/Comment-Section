@@ -26,7 +26,7 @@ export const Comment = ({
 }: Props) => {
   const [textExpanded, setTextExpanded] = useState(false);
   const [replying, setReplying] = useState(false);
-  const { isClamped, textRef } = useIsTextClamped();
+  const { isClamped, textRef } = useIsTextClamped(text);
   const { isMobile } = useIsMobile();
 
   const SPAN_CLASS_NAME = `${
@@ -53,13 +53,15 @@ export const Comment = ({
           <span ref={textRef} className={SPAN_CLASS_NAME}>
             {text}
           </span>
-          <div className="flex flex-row justify-end items-end mt-2 mb-0">
-            <ReadMoreButton
-              isClamped={isClamped}
-              setTextExpanded={setTextExpanded}
-              textExpanded={textExpanded}
-            />
-          </div>
+          {isClamped && (
+            <div className="flex flex-row justify-end items-end mt-2 mb-0">
+              <ReadMoreButton
+                isClamped={isClamped}
+                setTextExpanded={setTextExpanded}
+                textExpanded={textExpanded}
+              />
+            </div>
+          )}
           <div className="flex flex-row justify-between">
             <Votes orientation="horizontal"></Votes>
             {!isYours ? (
@@ -121,13 +123,15 @@ export const Comment = ({
           <span ref={textRef} className={SPAN_CLASS_NAME}>
             {text}
           </span>
-          <div className="flex flex-row justify-end items-center">
-            <ReadMoreButton
-              isClamped={isClamped}
-              setTextExpanded={setTextExpanded}
-              textExpanded={textExpanded}
-            />
-          </div>
+          {isClamped && (
+            <div className="flex flex-row justify-end items-center">
+              <ReadMoreButton
+                isClamped={isClamped}
+                setTextExpanded={setTextExpanded}
+                textExpanded={textExpanded}
+              />
+            </div>
+          )}
         </div>
       </div>
       {replying && <ReplyToComment></ReplyToComment>}
