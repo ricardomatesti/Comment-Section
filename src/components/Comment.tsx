@@ -38,7 +38,7 @@ export const Comment = ({
       <div className="flex flex-col">
         <div className="bg-white min-h-fit-content flex-initial max-h-min flex flex-col rounded-lg gap-4 p-4 relative">
           <div className="flex flex-row justify items-center gap-4">
-            <img src={imgUrl} className="w-10 h-10"></img>
+            <img src={imgUrl} className="w-10 h-10 rounded-[50%]"></img>
             <div className="flex flex-row items-center gap-2">
               <span className="text-lg font-bold line-clamp-1">{userName}</span>
               {isYours && (
@@ -92,7 +92,7 @@ export const Comment = ({
         <div className="flex flex-col flex-1 w-100 gap-4">
           <div className="flex flex-row justify-between">
             <div className="flex flex-row justify items-center gap-4">
-              <img src={imgUrl} className="w-10 h-10"></img>
+              <img src={imgUrl} className="w-10 h-10 rounded-[50%]"></img>
               <div className="flex flex-row items-center gap-2">
                 <span className="text-lg font-bold line-clamp-1">
                   {userName}

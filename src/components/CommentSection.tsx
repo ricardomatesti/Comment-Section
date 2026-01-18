@@ -1,16 +1,25 @@
+import type { CommentType } from "../hooks/useComments";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { Comment } from "./Comment";
-import { useComments } from "../hooks/useComments";
 
-type Props = {};
+type User = {
+  id: number;
+  name: string;
+  photo_url: string;
+  email: string;
+};
 
-export const CommentSection = ({}: Props) => {
+type Props = {
+  userSignedUp: User;
+  comments: CommentType[];
+};
+
+export const CommentSection = ({ userSignedUp, comments }: Props) => {
   const { isMobile } = useIsMobile();
-  const { comments, isLoading } = useComments();
 
   if (isMobile) {
     return (
-      <>
+      <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_90%,transparent_100%)]">
         {comments.length > 0 &&
           comments.map((comment) => {
             return (
@@ -20,20 +29,23 @@ export const CommentSection = ({}: Props) => {
                   imgUrl={comment.user_photo_url}
                   date={comment.date}
                   userName={comment.user_name}
+                  isYours={comment.user === userSignedUp.id}
                 ></Comment>
                 <RepliesToThisComment
                   isMobile={isMobile}
                   replies={comment.replies}
+                  userSignedUp={userSignedUp}
                 ></RepliesToThisComment>
               </div>
             );
           })}
-      </>
+        <div className="mt-4"></div>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_90%,transparent_100%)]">
       {comments.length > 0 &&
         comments.map((comment) => {
           return (
@@ -43,19 +55,22 @@ export const CommentSection = ({}: Props) => {
                 imgUrl={comment.user_photo_url}
                 date={comment.date}
                 userName={comment.user_name}
+                isYours={comment.user === userSignedUp.id}
               ></Comment>
               <RepliesToThisComment
                 isMobile={isMobile}
                 replies={comment.replies}
+                userSignedUp={userSignedUp}
               ></RepliesToThisComment>
             </div>
           );
         })}
-    </>
+      <div className="mt-4"></div>
+    </div>
   );
 };
 
-type RepliesProps = { isMobile: boolean; replies: Reply[] };
+type RepliesProps = { isMobile: boolean; replies: Reply[]; userSignedUp: User };
 
 type Reply = {
   date: string;
@@ -66,11 +81,17 @@ type Reply = {
   user_photo_url: string;
 };
 
-const RepliesToThisComment = ({ isMobile, replies }: RepliesProps) => {
+const RepliesToThisComment = ({
+  isMobile,
+  replies,
+  userSignedUp,
+}: RepliesProps) => {
+  if (replies.length === 0) return;
+
   if (isMobile) {
     return (
       <div className="flex flex-row">
-        <div className="w-[6px] flex-[1 none] bg-gray-300 ml-4 mr-4"></div>
+        <div className="w-[2px] flex-[1 none] bg-gray-300 ml-4 mr-4"></div>
         <div className="flex flex-col gap-4 grow">
           {replies.map((reply) => {
             return (
@@ -80,6 +101,7 @@ const RepliesToThisComment = ({ isMobile, replies }: RepliesProps) => {
                 imgUrl={reply.user_photo_url}
                 date={reply.date}
                 userName={reply.user_name}
+                isYours={reply.user === userSignedUp.id}
               ></Comment>
             );
           })}
@@ -100,6 +122,7 @@ const RepliesToThisComment = ({ isMobile, replies }: RepliesProps) => {
               imgUrl={reply.user_photo_url}
               date={reply.date}
               userName={reply.user_name}
+              isYours={reply.user === userSignedUp.id}
             ></Comment>
           );
         })}
