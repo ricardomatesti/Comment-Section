@@ -8,7 +8,7 @@ import { useRef } from "react";
 
 function App() {
   const userSignedUp = useUser();
-  const { comments, isLoading, setComments } = useComments();
+  const { comments, commentsLoading, setComments } = useComments();
   const lastCommentRef = useRef<HTMLDivElement>(null);
 
   const scrollToLastComment = () => {

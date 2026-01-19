@@ -10,6 +10,14 @@ export type CommentType = {
   replies: Reply[];
 };
 
+type CommentPayload = {
+  text: string;
+  replies: [];
+  user_photo_url: string;
+  user_name: string;
+  user: number;
+};
+
 export type Reply = {
   date: string;
   id: number;
@@ -19,16 +27,31 @@ export type Reply = {
   user_photo_url: string;
 };
 
-/*  useEffect(() => {
-  setComments(initialComments);
-}, [initialComments]);*/
-export const useComments = function (): {
+type ReturnType = {
   comments: CommentType[];
-  isLoading: boolean;
+  commentsLoading: boolean;
   setComments: React.Dispatch<React.SetStateAction<CommentType[]>>;
-} {
+  addComment: (commentData: CommentPayload) => Promise<
+    | {
+        success: boolean;
+        data: any;
+        error?: undefined;
+      }
+    | {
+        success: boolean;
+        error: string;
+        data?: undefined;
+      }
+  >;
+  error: string | null;
+  addCommentLoading: boolean;
+};
+
+export const useComments = function (): ReturnType {
   const [comments, setComments] = useState<CommentType[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [commentsLoading, setCommentsLoading] = useState(false);
+  const [addCommentLoading, setAddCommentLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const getComments = async function () {
@@ -44,7 +67,7 @@ export const useComments = function (): {
         const data = await response.json();
 
         setComments(data);
-        setIsLoading(false);
+        setCommentsLoading(false);
       } catch (error) {
         console.error("Error al crear:", error);
       }
@@ -53,16 +76,8 @@ export const useComments = function (): {
     getComments();
   }, []);
 
-  return { comments, isLoading, setComments };
-};
-
-export const useAddComment = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // TODO: tipar el commentData
-  const addComment = async (commentData: any) => {
-    setLoading(true);
+  const addComment = async (commentData: CommentPayload) => {
+    setAddCommentLoading(true);
     setError(null);
 
     try {
@@ -94,9 +109,16 @@ export const useAddComment = () => {
       setError(mensajeError);
       return { success: false, error: mensajeError };
     } finally {
-      setLoading(false);
+      setAddCommentLoading(false);
     }
   };
 
-  return { addComment, loading, error };
+  return {
+    comments,
+    commentsLoading,
+    error,
+    setComments,
+    addComment,
+    addCommentLoading,
+  };
 };

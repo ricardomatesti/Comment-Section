@@ -1,5 +1,5 @@
 import { useIsMobile } from "../hooks/useIsMobile";
-import { useAddComment, type CommentType } from "../hooks/useComments";
+import { useComments, type CommentType } from "../hooks/useComments";
 import { useState, type FormEvent } from "react";
 
 type User = {
@@ -21,7 +21,7 @@ export const AddCommentSection = ({
   scrollToLastComment,
 }: Props) => {
   const { isMobile } = useIsMobile();
-  const { addComment, loading, error } = useAddComment();
+  const { addComment, addCommentLoading, error } = useComments();
   const [text, setText] = useState("");
 
   const addOptimisticComment = async ({
