@@ -12,18 +12,27 @@ type User = {
 type Props = {
   userSignedUp: User;
   comments: CommentType[];
+  lastCommentRef: React.Ref<HTMLDivElement> | undefined; // TODO tipar
 };
 
-export const CommentSection = ({ userSignedUp, comments }: Props) => {
+export const CommentSection = ({
+  userSignedUp,
+  comments,
+  lastCommentRef,
+}: Props) => {
   const { isMobile } = useIsMobile();
 
   if (isMobile) {
     return (
-      <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_90%,transparent_100%)]">
+      <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)]">
         {comments.length > 0 &&
-          comments.map((comment) => {
+          comments.map((comment, index) => {
             return (
-              <div className="flex flex-col gap-4" key={comment.id}>
+              <div
+                className="flex flex-col gap-4"
+                key={comment.id}
+                ref={index === comments.length - 1 ? lastCommentRef : null}
+              >
                 <Comment
                   text={comment.text}
                   imgUrl={comment.user_photo_url}
@@ -45,11 +54,15 @@ export const CommentSection = ({ userSignedUp, comments }: Props) => {
   }
 
   return (
-    <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_90%,transparent_100%)]">
+    <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)]">
       {comments.length > 0 &&
-        comments.map((comment) => {
+        comments.map((comment, index) => {
           return (
-            <div className="flex flex-col gap-4" key={comment.id}>
+            <div
+              className="flex flex-col gap-4"
+              key={comment.id}
+              ref={index === comments.length - 1 ? lastCommentRef : null}
+            >
               <Comment
                 text={comment.text}
                 imgUrl={comment.user_photo_url}

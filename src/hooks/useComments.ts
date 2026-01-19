@@ -19,11 +19,15 @@ export type Reply = {
   user_photo_url: string;
 };
 
+/*  useEffect(() => {
+  setComments(initialComments);
+}, [initialComments]);*/
 export const useComments = function (): {
   comments: CommentType[];
   isLoading: boolean;
+  setComments: React.Dispatch<React.SetStateAction<CommentType[]>>;
 } {
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<CommentType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -49,7 +53,7 @@ export const useComments = function (): {
     getComments();
   }, []);
 
-  return { comments, isLoading };
+  return { comments, isLoading, setComments };
 };
 
 export const useAddComment = () => {
