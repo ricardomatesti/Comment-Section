@@ -1,15 +1,16 @@
 type VotesProp = {
   orientation: "horizontal" | "vertical";
+  votes: number;
 };
 
-export const Votes = ({ orientation }: VotesProp) => {
+export const Votes = ({ orientation, votes }: VotesProp) => {
   if (orientation === "horizontal") {
     return (
       <div className="h-10 w-25 bg-(--purple-100) rounded-lg flex-none flex flex-row items-center justify-between">
         <button className="w-8 h-8 cursor-pointer text-(--purple-400) text-lg font-bold">
           +
         </button>
-        <span className="text-lg font-bold text-(--purple-600)">4</span>
+        <span className="text-lg font-bold text-(--purple-600)">{votes}</span>
         <button className="w-8 h-8 cursor-pointer text-(--purple-400) font-bold">
           <span className="text-lg scale-x-200">-</span>
         </button>
@@ -22,7 +23,7 @@ export const Votes = ({ orientation }: VotesProp) => {
       <button className="w-8 h-8 cursor-pointer text-(--purple-400) text-lg font-bold">
         +
       </button>
-      <span className="text-lg font-bold text-(--purple-600)">4</span>
+      <span className="text-lg font-bold text-(--purple-600)">{votes}</span>
       <button className="w-8 h-8 cursor-pointer text-(--purple-400) font-bold">
         <span className="text-lg scale-x-200">-</span>
       </button>

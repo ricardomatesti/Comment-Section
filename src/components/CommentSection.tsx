@@ -42,6 +42,7 @@ export const CommentSection = ({ userSignedUp }: Props) => {
                   imgUrl={comment.user_photo_url}
                   date={comment.date}
                   userName={comment.user_name}
+                  votes={comment.votes}
                   isYours={comment.user === userSignedUp.id}
                 ></Comment>
                 <RepliesToThisComment
@@ -74,6 +75,7 @@ export const CommentSection = ({ userSignedUp }: Props) => {
                 imgUrl={comment.user_photo_url}
                 date={comment.date}
                 userName={comment.user_name}
+                votes={comment.votes}
                 isYours={comment.user === userSignedUp.id}
               ></Comment>
               <RepliesToThisComment
@@ -103,6 +105,7 @@ type Reply = {
   text: string;
   user: number;
   user_name: string;
+  votes: number;
   user_photo_url: string;
 };
 
@@ -123,11 +126,13 @@ const RepliesToThisComment = ({
             return (
               <Comment
                 key={reply.id}
-                id={parentCommentId}
+                id={reply.id}
+                parentCommentId={parentCommentId}
                 text={reply.text}
                 imgUrl={reply.user_photo_url}
                 date={reply.date}
                 userName={reply.user_name}
+                votes={reply.votes}
                 isYours={reply.user === userSignedUp.id}
               ></Comment>
             );
@@ -145,11 +150,13 @@ const RepliesToThisComment = ({
           return (
             <Comment
               key={reply.id}
-              id={parentCommentId}
+              id={reply.id}
+              parentCommentId={parentCommentId}
               text={reply.text}
               imgUrl={reply.user_photo_url}
               date={reply.date}
               userName={reply.user_name}
+              votes={reply.votes}
               isYours={reply.user === userSignedUp.id}
             ></Comment>
           );

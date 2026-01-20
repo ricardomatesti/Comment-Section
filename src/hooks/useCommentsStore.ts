@@ -8,6 +8,7 @@ export type CommentType = {
   user: number;
   user_name: string;
   user_photo_url: string;
+  votes: number;
   replies: Reply[];
 };
 
@@ -19,6 +20,7 @@ export type Reply = {
   user_name: string;
   user_photo_url: string;
   comment: number;
+  votes: number;
 };
 
 interface CommentsState {
@@ -43,12 +45,44 @@ interface CommentsState {
     commentId,
     setReplying,
   }: {
-    setText: any;
+    setText: any; //TODO tipar
     user: User;
     text: string;
     commentId: number;
     setReplying: React.Dispatch<React.SetStateAction<boolean>>;
   }) => Promise<void>;
+  deleteComment: ({ commentId }: { commentId: number }) => void;
+  deleteReply: ({
+    parentCommentId,
+    replyId,
+  }: {
+    parentCommentId: number;
+    replyId: number;
+  }) => void;
+  updateComment: ({
+    commentId,
+    text,
+    oldText,
+    setText,
+  }: {
+    commentId: number;
+    text: string;
+    oldText: string;
+    setText: any;
+  }) => void;
+  updateReply: ({
+    commentId,
+    replyId,
+    text,
+    oldText,
+    setText,
+  }: {
+    commentId: number;
+    replyId: number;
+    text: string;
+    oldText: string;
+    setText: any;
+  }) => void;
   scrollToComment: ({
     commentRef,
   }: {
@@ -102,6 +136,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       replies: [],
       user_photo_url: user.photo_url,
       user_name: user.name,
+      votes: 0,
       user: user.id,
     };
 
@@ -188,6 +223,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       user_photo_url: user.photo_url,
       user_name: user.name,
       user: user.id,
+      votes: 0,
       comment: commentId,
     };
 
@@ -254,6 +290,197 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       setReplying(true);
     } finally {
       set({ addReplyLoading: false });
+    }
+  },
+
+  deleteComment: async ({ commentId }: { commentId: number }) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/comment/${commentId}/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData) || "Error adding comment");
+      }
+
+      set((state) => ({
+        comments: [...state.comments.slice(0, -1)],
+      }));
+    } catch (err) {
+      let mensajeError = "Unknown Error";
+
+      if (err instanceof Error) {
+        mensajeError = err.message;
+      } else if (typeof err === "string") {
+        mensajeError = err;
+      }
+
+      set({ error: mensajeError });
+    }
+  },
+
+  deleteReply: async ({
+    parentCommentId,
+    replyId,
+  }: {
+    parentCommentId: number;
+    replyId: number;
+  }) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/reply/${replyId}/`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData) || "Error adding comment");
+      }
+
+      set((state) => ({
+        comments: [
+          ...state.comments.map((c) =>
+            c.id === parentCommentId
+              ? {
+                  ...c,
+                  replies: [...c.replies.filter((r) => r.id !== replyId)],
+                }
+              : c
+          ),
+        ],
+      }));
+    } catch (err) {
+      let mensajeError = "Unknown Error";
+
+      if (err instanceof Error) {
+        mensajeError = err.message;
+      } else if (typeof err === "string") {
+        mensajeError = err;
+      }
+
+      set({ error: mensajeError });
+    }
+  },
+
+  updateComment: async ({
+    commentId,
+    text,
+    oldText,
+    setText,
+  }: {
+    commentId: number;
+    text: string;
+    oldText: string;
+    setText: any;
+  }) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/comment/${commentId}/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ text: text }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData) || "Error adding comment");
+      }
+      setText(text);
+      set((state) => ({
+        comments: [
+          ...state.comments.map((c) =>
+            c.id === commentId ? { ...c, text: text } : c
+          ),
+        ],
+      }));
+    } catch (err) {
+      let mensajeError = "Unknown Error";
+
+      if (err instanceof Error) {
+        mensajeError = err.message;
+      } else if (typeof err === "string") {
+        mensajeError = err;
+      }
+      setText(oldText);
+      set({ error: mensajeError });
+    }
+  },
+  updateReply: async ({
+    commentId,
+    replyId,
+    text,
+    oldText,
+    setText,
+  }: {
+    commentId: number;
+    replyId: number;
+    text: string;
+    oldText: string;
+    setText: any;
+  }) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/reply/${replyId}/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ text: text }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData) || "Error adding comment");
+      }
+      setText(text);
+      set((state) => ({
+        comments: [
+          ...state.comments.map((c) =>
+            c.id === commentId
+              ? {
+                  ...c,
+                  replies: [
+                    ...c.replies.map((r) =>
+                      r.id === replyId ? { ...r, text: text } : r
+                    ),
+                  ],
+                }
+              : c
+          ),
+        ],
+      }));
+    } catch (err) {
+      let mensajeError = "Unknown Error";
+
+      if (err instanceof Error) {
+        mensajeError = err.message;
+      } else if (typeof err === "string") {
+        mensajeError = err;
+      }
+      setText(oldText);
+      set({ error: mensajeError });
     }
   },
 }));

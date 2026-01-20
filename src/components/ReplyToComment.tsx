@@ -40,7 +40,7 @@ export const ReplyToComment = ({
             value={text}
           ></textarea>
           <div className="flex flex-row justify-between">
-            <img src="/avatars/image-amyrobson.png" className="w-10 h-10"></img>
+            <img src={user.photo_url} className="w-10 h-10 rounded-[50%]"></img>
 
             <button
               className="bg-(--purple-600) border rounded-md h-12 px-6 text-white cursor-pointer active:opacity-50"
@@ -56,7 +56,7 @@ export const ReplyToComment = ({
 
   return (
     <div className="bg-white mt-2 flex-initial h-40 rounded-md flex flex-row gap-4 p-6">
-      <img src="/avatars/image-amyrobson.png" className="w-12 h-12"></img>
+      <img src={user.photo_url} className="w-10 h-10 rounded-[50%]"></img>
       <form
         className="w-full gap-4 flex flex-row"
         onSubmit={(e) => handleSubmit({ e })}

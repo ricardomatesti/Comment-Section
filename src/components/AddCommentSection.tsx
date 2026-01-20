@@ -37,7 +37,7 @@ export const AddCommentSection = ({ user }: Props) => {
 
             <button
               type="submit"
-              className="bg-(--purple-600) border rounded-md h-12 px-6 text-white cursor-pointer active:opacity-50"
+              className="bg-(--purple-600) border rounded-md h-12 px-6 text-white cursor-pointer active:opacity-50 font-medium"
             >
               SEND
             </button>
@@ -63,7 +63,7 @@ export const AddCommentSection = ({ user }: Props) => {
         ></textarea>
         <button
           type="submit"
-          className="bg-(--purple-600) border rounded-md h-10 px-6 text-white cursor-pointer active:opacity-50"
+          className="bg-(--purple-600) border rounded-md h-10 px-6 text-white cursor-pointer active:opacity-50 font-medium"
         >
           SEND
         </button>
