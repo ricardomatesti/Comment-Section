@@ -1,6 +1,7 @@
-import type { CommentType } from "../hooks/useComments";
+import { useEffect, useRef } from "react";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { Comment } from "./Comment";
+import { useCommentsStore } from "../hooks/useCommentsStore";
 
 type User = {
   id: number;
@@ -11,27 +12,30 @@ type User = {
 
 type Props = {
   userSignedUp: User;
-  comments: CommentType[];
-  lastCommentRef: React.Ref<HTMLDivElement> | undefined; // TODO tipar
 };
 
-export const CommentSection = ({
-  userSignedUp,
-  comments,
-  lastCommentRef,
-}: Props) => {
+export const CommentSection = ({ userSignedUp }: Props) => {
   const { isMobile } = useIsMobile();
+  const commentRef = useRef<HTMLDivElement>(null);
+  const { comments, commentToScrollId, fetchComments, scrollToComment } =
+    useCommentsStore();
+
+  useEffect(() => {
+    if (commentToScrollId) {
+      scrollToComment({ commentRef });
+    }
+  }, [comments]);
 
   if (isMobile) {
     return (
       <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)]">
         {comments.length > 0 &&
-          comments.map((comment, index) => {
+          comments.map((comment) => {
             return (
               <div
                 className="flex flex-col gap-4"
                 key={comment.id}
-                ref={index === comments.length - 1 ? lastCommentRef : null}
+                ref={comment.id === commentToScrollId ? commentRef : null}
               >
                 <Comment
                   text={comment.text}
@@ -56,12 +60,12 @@ export const CommentSection = ({
   return (
     <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)]">
       {comments.length > 0 &&
-        comments.map((comment, index) => {
+        comments.map((comment) => {
           return (
             <div
               className="flex flex-col gap-4"
               key={comment.id}
-              ref={index === comments.length - 1 ? lastCommentRef : null}
+              ref={comment.id === commentToScrollId ? commentRef : null}
             >
               <Comment
                 text={comment.text}

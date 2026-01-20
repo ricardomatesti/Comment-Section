@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 
-type User = {
-  date: string;
+export type User = {
   id: number;
-  text: string;
-  user: number;
-  user_name: string;
+  name: string;
+  photo_url: string;
+  email: string;
 };
 
 export const useUsers = function (): {
