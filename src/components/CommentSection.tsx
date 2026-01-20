@@ -17,8 +17,7 @@ type Props = {
 export const CommentSection = ({ userSignedUp }: Props) => {
   const { isMobile } = useIsMobile();
   const commentRef = useRef<HTMLDivElement>(null);
-  const { comments, commentToScrollId, fetchComments, scrollToComment } =
-    useCommentsStore();
+  const { comments, commentToScrollId, scrollToComment } = useCommentsStore();
 
   useEffect(() => {
     if (commentToScrollId) {
@@ -38,6 +37,7 @@ export const CommentSection = ({ userSignedUp }: Props) => {
                 ref={comment.id === commentToScrollId ? commentRef : null}
               >
                 <Comment
+                  id={comment.id}
                   text={comment.text}
                   imgUrl={comment.user_photo_url}
                   date={comment.date}
@@ -45,6 +45,7 @@ export const CommentSection = ({ userSignedUp }: Props) => {
                   isYours={comment.user === userSignedUp.id}
                 ></Comment>
                 <RepliesToThisComment
+                  parentCommentId={comment.id}
                   isMobile={isMobile}
                   replies={comment.replies}
                   userSignedUp={userSignedUp}
@@ -68,6 +69,7 @@ export const CommentSection = ({ userSignedUp }: Props) => {
               ref={comment.id === commentToScrollId ? commentRef : null}
             >
               <Comment
+                id={comment.id}
                 text={comment.text}
                 imgUrl={comment.user_photo_url}
                 date={comment.date}
@@ -75,6 +77,7 @@ export const CommentSection = ({ userSignedUp }: Props) => {
                 isYours={comment.user === userSignedUp.id}
               ></Comment>
               <RepliesToThisComment
+                parentCommentId={comment.id}
                 isMobile={isMobile}
                 replies={comment.replies}
                 userSignedUp={userSignedUp}
@@ -87,7 +90,12 @@ export const CommentSection = ({ userSignedUp }: Props) => {
   );
 };
 
-type RepliesProps = { isMobile: boolean; replies: Reply[]; userSignedUp: User };
+type RepliesProps = {
+  parentCommentId: number;
+  isMobile: boolean;
+  replies: Reply[];
+  userSignedUp: User;
+};
 
 type Reply = {
   date: string;
@@ -99,6 +107,7 @@ type Reply = {
 };
 
 const RepliesToThisComment = ({
+  parentCommentId,
   isMobile,
   replies,
   userSignedUp,
@@ -114,6 +123,7 @@ const RepliesToThisComment = ({
             return (
               <Comment
                 key={reply.id}
+                id={parentCommentId}
                 text={reply.text}
                 imgUrl={reply.user_photo_url}
                 date={reply.date}
@@ -135,6 +145,7 @@ const RepliesToThisComment = ({
           return (
             <Comment
               key={reply.id}
+              id={parentCommentId}
               text={reply.text}
               imgUrl={reply.user_photo_url}
               date={reply.date}

@@ -9,7 +9,6 @@ type Props = {
 
 export const AddCommentSection = ({ user }: Props) => {
   const { isMobile } = useIsMobile();
-  //const { addComment, addCommentLoading, error } = useComments();
   const { addComment } = useCommentsStore();
 
   const [text, setText] = useState("");

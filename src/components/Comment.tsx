@@ -10,6 +10,7 @@ import { DeleteButton } from "./shared/DeleteButton";
 import { EditButton } from "./shared/EditButton";
 
 type Props = {
+  id: number;
   text: string;
   imgUrl: string;
   date: string;
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export const Comment = ({
+  id,
   text,
   imgUrl,
   date,
@@ -77,7 +79,11 @@ export const Comment = ({
             )}
           </div>
         </div>
-        {replying && <ReplyToComment></ReplyToComment>}
+        <ReplyToComment
+          replying={replying}
+          setReplying={setReplying}
+          commentId={id}
+        ></ReplyToComment>
       </div>
     );
   }
@@ -134,7 +140,11 @@ export const Comment = ({
           )}
         </div>
       </div>
-      {replying && <ReplyToComment></ReplyToComment>}
+      <ReplyToComment
+        replying={replying}
+        setReplying={setReplying}
+        commentId={id}
+      ></ReplyToComment>
     </div>
   );
 };

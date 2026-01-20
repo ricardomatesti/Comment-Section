@@ -1,20 +1,51 @@
 import { useIsMobile } from "../hooks/useIsMobile";
+import { type FormEvent } from "react";
+import { useCommentsStore } from "../hooks/useCommentsStore";
+import { useState } from "react";
+import { useUser } from "../hooks/useUser";
 
-export const ReplyToComment = () => {
+export const ReplyToComment = ({
+  commentId,
+  replying,
+  setReplying,
+}: {
+  commentId: number;
+  replying: boolean;
+  setReplying: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { isMobile } = useIsMobile();
+  const { addReply } = useCommentsStore();
+  const user = useUser();
+
+  const [text, setText] = useState("");
+
+  const handleSubmit = ({ e }: { e: FormEvent }) => {
+    e.preventDefault();
+    addReply({ setText, user, text, commentId, setReplying });
+  };
+
+  if (!replying) return;
 
   if (isMobile) {
     return (
       <div className="bg-white mt-2 flex-initial h-50 rounded-md flex flex-col gap-4 p-4">
-        <form className="h-full flex flex-col gap-4" onSubmit={(e) => ({ e })}>
+        <form
+          className="h-full flex flex-col gap-4"
+          onSubmit={(e) => handleSubmit({ e })}
+        >
           <textarea
             className="w-full flex-1 border-gray-200 max-h-40 border border-solid rounded-md py-3 px-4 text-start text-md "
             placeholder="Add a reply..."
+            onChange={(e) => setText(e.target.value)}
+            value={text}
           ></textarea>
           <div className="flex flex-row justify-between">
             <img src="/avatars/image-amyrobson.png" className="w-10 h-10"></img>
 
-            <button className="bg-(--purple-600) border rounded-md h-12 px-6 text-white cursor-pointer active:opacity-50">
+            <button
+              className="bg-(--purple-600) border rounded-md h-12 px-6 text-white cursor-pointer active:opacity-50"
+              type="submit"
+            >
               REPLY
             </button>
           </div>
@@ -26,12 +57,20 @@ export const ReplyToComment = () => {
   return (
     <div className="bg-white mt-2 flex-initial h-40 rounded-md flex flex-row gap-4 p-6">
       <img src="/avatars/image-amyrobson.png" className="w-12 h-12"></img>
-      <form className="w-full gap-4 flex flex-row" onSubmit={(e) => ({ e })}>
+      <form
+        className="w-full gap-4 flex flex-row"
+        onSubmit={(e) => handleSubmit({ e })}
+      >
         <textarea
           className="w-full flex-1 border-gray-200 max-h-29 border border-solid rounded-md py-3 px-4 text-start text-md"
           placeholder="Add a reply..."
+          onChange={(e) => setText(e.target.value)}
+          value={text}
         ></textarea>
-        <button className="bg-(--purple-600) border rounded-md h-10 px-6 text-white cursor-pointer active:opacity-50">
+        <button
+          className="bg-(--purple-600) border rounded-md h-10 px-6 text-white cursor-pointer active:opacity-50"
+          type="submit"
+        >
           REPLY
         </button>
       </form>

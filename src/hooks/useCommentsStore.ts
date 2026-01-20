@@ -18,12 +18,14 @@ export type Reply = {
   user: number;
   user_name: string;
   user_photo_url: string;
+  comment: number;
 };
 
 interface CommentsState {
   comments: CommentType[];
   commentsLoading: boolean;
   addCommentLoading: boolean;
+  addReplyLoading: boolean;
   error: string | null;
   commentToScrollId: number | undefined;
 
@@ -33,6 +35,19 @@ interface CommentsState {
     setText: (t: string) => void;
     user: User;
     text: string;
+  }) => Promise<void>;
+  addReply: ({
+    setText,
+    user,
+    text,
+    commentId,
+    setReplying,
+  }: {
+    setText: any;
+    user: User;
+    text: string;
+    commentId: number;
+    setReplying: React.Dispatch<React.SetStateAction<boolean>>;
   }) => Promise<void>;
   scrollToComment: ({
     commentRef,
@@ -45,6 +60,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
   comments: [],
   commentsLoading: false,
   addCommentLoading: false,
+  addReplyLoading: false,
   error: null,
   commentToScrollId: undefined,
 
@@ -149,6 +165,96 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       behavior: "smooth",
       block: "start",
     });
+  },
+
+  addReply: async ({
+    setText,
+    user,
+    text,
+    commentId,
+    setReplying,
+  }: {
+    setText: any;
+    user: User;
+    text: string;
+    commentId: number;
+    setReplying: React.Dispatch<React.SetStateAction<boolean>>;
+  }) => {
+    const temporalId = Date.now(); // ID temporal
+    const optimisticReply: Reply = {
+      id: temporalId,
+      text: text,
+      date: Date(),
+      user_photo_url: user.photo_url,
+      user_name: user.name,
+      user: user.id,
+      comment: commentId,
+    };
+
+    set((state) => ({
+      comments: state.comments.map((c) =>
+        c.id === commentId
+          ? { ...c, replies: [...c.replies, optimisticReply] }
+          : c
+      ),
+    }));
+    setText("");
+    setReplying(false);
+
+    set({ addReplyLoading: true, error: null });
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/reply/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          text: text,
+          user_photo_url: user.photo_url,
+          user_name: user.name,
+          user: user.id,
+          comment: commentId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData) || "Error adding reply");
+      }
+
+      const data = await response.json();
+      set({ commentToScrollId: commentId });
+      set((state) => ({
+        comments: state.comments.map((c) =>
+          c.id === commentId
+            ? { ...c, replies: [...c.replies.slice(0, -1), data] }
+            : c
+        ),
+      }));
+    } catch (err) {
+      let mensajeError = "Unknown Error";
+
+      if (err instanceof Error) {
+        mensajeError = err.message;
+      } else if (typeof err === "string") {
+        mensajeError = err;
+      }
+
+      set((state) => ({
+        comments: state.comments.map((c) =>
+          c.id === commentId
+            ? { ...c, replies: [...c.replies.slice(0, -1)] }
+            : c
+        ),
+        error: mensajeError,
+      }));
+      setText(text);
+      setReplying(true);
+    } finally {
+      set({ addReplyLoading: false });
+    }
   },
 }));
 
