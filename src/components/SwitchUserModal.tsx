@@ -5,11 +5,18 @@ import { Image } from "./shared/Image";
 
 const users = [
   {
-    id: 2,
+    id: 1,
     name: "Peter Griffin",
     photo_url:
       "https://imagedelivery.net/LBWXYQ-XnKSYxbZ-NuYGqQ/f69f1ba2-802c-4160-b24f-e54c5cffc200/avatarhd",
     email: "petergriffin@gmail.com",
+  },
+  {
+    id: 2,
+    name: "Ibai",
+    photo_url:
+      "https://static-cdn.jtvnw.net/jtv_user_pictures/574228be-01ef-4eab-bc0e-a4f6b68bedba-profile_image-300x300.png",
+    email: "ibai@gmail.com",
   },
   {
     id: 3,
@@ -20,17 +27,10 @@ const users = [
   },
   {
     id: 4,
-    name: "Ibai",
-    photo_url:
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/574228be-01ef-4eab-bc0e-a4f6b68bedba-profile_image-300x300.png",
-    email: "ibai@gmail.com",
-  },
-  {
-    id: 5,
     name: "Antonio Recio",
     photo_url:
       "http://pbs.twimg.com/profile_images/1407613227/recio_400x400.jpg",
-    email: "ibai@gmail.com",
+    email: "recio@gmail.com",
   },
 ];
 
