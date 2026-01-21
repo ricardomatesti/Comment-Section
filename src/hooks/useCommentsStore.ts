@@ -1,7 +1,7 @@
-import { tr } from "motion/react-client";
 import { type User } from "./useUsers";
 import { create } from "zustand";
-import type { Votes } from "../components/shared/Votes";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 export type CommentType = {
   date: string;
@@ -130,7 +130,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
     set({ commentsLoading: true });
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/comment/", {
+      const response = await fetch(`${API_URL}/api/comment/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -177,7 +177,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
     set({ addCommentLoading: true, error: null });
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/comment/", {
+      const response = await fetch(`${API_URL}/api/comment/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -271,7 +271,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
     set({ addReplyLoading: true, error: null });
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/reply/", {
+      const response = await fetch(`${API_URL}/api/reply/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -328,16 +328,13 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
 
   deleteComment: async ({ commentId }: { commentId: number }) => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/comment/${commentId}/`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/api/comment/${commentId}/`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+        },
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -368,16 +365,13 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
     replyId: number;
   }) => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/reply/${replyId}/`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/api/reply/${replyId}/`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+        },
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -421,17 +415,14 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
     setText: any;
   }) => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/comment/${commentId}/`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ text: text }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/comment/${commentId}/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ text: text }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -471,17 +462,14 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
     setText: any;
   }) => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/reply/${replyId}/`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ text: text }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/reply/${replyId}/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ text: text }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -526,17 +514,14 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
     newVotes: number;
   }) => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/comment/${commentId}/`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ votes: newVotes }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/comment/${commentId}/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ votes: newVotes }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -573,17 +558,14 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
     newVotes: number;
   }) => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/reply/${replyId}/`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ votes: newVotes }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/reply/${replyId}/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ votes: newVotes }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
