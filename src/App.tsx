@@ -3,11 +3,15 @@ import { CommentSection } from "./components/CommentSection.js";
 import { AddCommentSection } from "./components/AddCommentSection.js";
 import { Header } from "./components/Header.js";
 import { UserProvider } from "./contexts/userContext.js";
+
 function App() {
   return (
     <UserProvider>
       <main className="w-full flex flex-row justify-center items-center">
-        <div className="max-w-200 flex-initial w-full h-[100vh] flex flex-col justify-between gap-0 mx-4 overflow-hidden relative">
+        <div
+          id="app-wraper"
+          className="max-w-200 flex-initial w-full h-[100vh] flex flex-col justify-between gap-0 mx-4 overflow-hidden relative"
+        >
           <Header></Header>
 
           <CommentSection></CommentSection>

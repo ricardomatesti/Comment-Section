@@ -15,8 +15,6 @@ import { CancelButton } from "./shared/CancelButton";
 import { motion, AnimatePresence } from "motion/react";
 import { UserContext } from "../contexts/userContext";
 
-const root = document.getElementById("root");
-
 type Props = {
   id: number;
   parentCommentId?: number;
@@ -229,7 +227,7 @@ export const CommentWithoutAnimation = ({
               replyId={parentCommentId ? id : undefined}
               onClose={setShowModal}
             />,
-            root ?? document.body
+            document.getElementById("root") ?? document.body
           )}
       </div>
     );
@@ -309,7 +307,7 @@ export const CommentWithoutAnimation = ({
               replyId={parentCommentId ? id : undefined}
               onClose={setShowModal}
             />,
-            root ?? document.body
+            document.getElementById("root") ?? document.body
           )}
       </div>
     );
@@ -395,7 +393,7 @@ export const CommentWithoutAnimation = ({
             replyId={parentCommentId ? id : undefined}
             onClose={setShowModal}
           />,
-          root ?? document.body
+          document.getElementById("root") ?? document.body
         )}
     </div>
   );

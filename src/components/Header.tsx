@@ -3,8 +3,6 @@ import { createPortal } from "react-dom";
 import { SwitchUserModal } from "./SwitchUserModal";
 import { UserContext } from "../contexts/userContext";
 
-const root = document.getElementById("root");
-
 export const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const { user } = useContext(UserContext);
@@ -35,7 +33,7 @@ export const Header = () => {
       {showModal &&
         createPortal(
           <SwitchUserModal onClose={setShowModal} />,
-          root ?? document.body
+          document.getElementById("root") ?? document.body
         )}
     </div>
   );

@@ -35,6 +35,7 @@ interface CommentsState {
   commentToScrollId: number | undefined;
 
   // Acciones
+  setError: ({ error }: { error: string }) => void;
   fetchComments: () => Promise<void>;
   addComment: (params: {
     setText: (t: string) => void;
@@ -100,6 +101,9 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
   addReplyLoading: false,
   error: null,
   commentToScrollId: undefined,
+  setError: ({ error }: { error: string }) => {
+    set({ error: error });
+  },
 
   fetchComments: async () => {
     set({ commentsLoading: true });
@@ -170,7 +174,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(JSON.stringify(errorData) || "Error adding comment");
+        throw new Error("Unexpected error adding comment");
       }
 
       const data = await response.json();
@@ -264,7 +268,8 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(JSON.stringify(errorData) || "Error adding reply");
+        //Normally we would throw JSON.stringify(errorData) ||"Error adding reply"
+        throw new Error("Unexpected error adding reply");
       }
 
       const data = await response.json();
@@ -315,7 +320,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(JSON.stringify(errorData) || "Error adding comment");
+        throw new Error("Unexpected error deleting comment");
       }
 
       set((state) => ({
@@ -355,7 +360,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(JSON.stringify(errorData) || "Error adding comment");
+        throw new Error("Unexpected error deleting reply");
       }
 
       set((state) => ({
@@ -409,7 +414,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(JSON.stringify(errorData) || "Error adding comment");
+        throw new Error("Unexpected error updating comment");
       }
       setText(text);
       set((state) => ({
@@ -459,7 +464,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(JSON.stringify(errorData) || "Error adding comment");
+        throw new Error("Unexpected error updating reply");
       }
       setText(text);
       set((state) => ({

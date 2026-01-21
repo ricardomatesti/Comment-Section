@@ -4,6 +4,8 @@ import { Comment } from "./Comment";
 import { useCommentsStore } from "../hooks/useCommentsStore";
 import { UserContext } from "../contexts/userContext";
 import { AnimatePresence } from "motion/react";
+import { Toast } from "./Toast";
+import { createPortal } from "react-dom";
 
 type User = {
   id: number;
@@ -16,7 +18,8 @@ export const CommentSection = () => {
   const { isMobile } = useIsMobile();
   const { user: userSignedUp } = useContext(UserContext);
   const commentRef = useRef<HTMLDivElement>(null);
-  const { comments, commentToScrollId, scrollToComment } = useCommentsStore();
+  const { comments, commentToScrollId, scrollToComment, error } =
+    useCommentsStore();
 
   useEffect(() => {
     if (commentToScrollId) {
@@ -74,6 +77,12 @@ export const CommentSection = () => {
             );
           })}
         <div className="mt-4"></div>
+        {error &&
+          error !== "" &&
+          createPortal(
+            <Toast type="error" text={error}></Toast>,
+            document.getElementById("app-wraper") ?? document.body
+          )}
       </div>
     );
   }
@@ -111,6 +120,12 @@ export const CommentSection = () => {
           })}
       </AnimatePresence>
       <div className="mt-4"></div>
+      {error &&
+        error !== "" &&
+        createPortal(
+          <Toast type="error" text={error}></Toast>,
+          document.getElementById("app-wraper") ?? document.body
+        )}
     </div>
   );
 };
