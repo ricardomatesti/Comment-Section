@@ -2,16 +2,28 @@ import { useIsMobile } from "../hooks/useIsMobile";
 import { useContext, useState, type FormEvent } from "react";
 import { useCommentsStore } from "../hooks/useCommentsStore";
 import { UserContext } from "../contexts/userContext";
+import { FormContext } from "../contexts/formContext";
+import { Toast } from "./Toast";
+import { createPortal } from "react-dom";
 
 export const AddCommentSection = () => {
   const { isMobile } = useIsMobile();
   const { user } = useContext(UserContext);
   const { addComment } = useCommentsStore();
 
-  const [text, setText] = useState("");
+  const { text, setText, setWarningMessage, warningMessage } =
+    useContext(FormContext);
 
   const handleSubmit = ({ e }: { e: FormEvent }) => {
     e.preventDefault();
+    if (text.trim() === "") {
+      setWarningMessage("Comments must be unempty");
+      return;
+    }
+    if (text.length > 900) {
+      setWarningMessage("Comments should be shorter");
+      return;
+    }
     addComment({ setText, user, text });
   };
 
@@ -40,6 +52,11 @@ export const AddCommentSection = () => {
             </button>
           </div>
         </form>
+        {warningMessage !== "" &&
+          createPortal(
+            <Toast type="warning" text={warningMessage}></Toast>,
+            document.getElementById("app-wraper") ?? document.body
+          )}
       </div>
     );
   }
@@ -65,6 +82,11 @@ export const AddCommentSection = () => {
           SEND
         </button>
       </form>
+      {warningMessage !== "" &&
+        createPortal(
+          <Toast type="warning" text={warningMessage}></Toast>,
+          document.getElementById("app-wraper") ?? document.body
+        )}
     </div>
   );
 };

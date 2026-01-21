@@ -3,6 +3,7 @@ import { CommentSection } from "./components/CommentSection.js";
 import { AddCommentSection } from "./components/AddCommentSection.js";
 import { Header } from "./components/Header.js";
 import { UserProvider } from "./contexts/userContext.js";
+import { FormContextProvider } from "./contexts/formContext.js";
 
 function App() {
   return (
@@ -16,7 +17,9 @@ function App() {
 
           <CommentSection></CommentSection>
 
-          <AddCommentSection></AddCommentSection>
+          <FormContextProvider>
+            <AddCommentSection></AddCommentSection>
+          </FormContextProvider>
         </div>
       </main>
     </UserProvider>

@@ -1,7 +1,8 @@
 import { motion } from "motion/react";
 import { useCommentsStore } from "../hooks/useCommentsStore";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import useIsMobile from "../hooks/useIsMobile";
+import { FormContext } from "../contexts/formContext";
 
 type Props = {
   type: "error" | "info" | "warning";
@@ -9,16 +10,23 @@ type Props = {
   duration?: number;
 };
 
-export const Toast = ({ type, text, duration = 22500 }: Props) => {
+export const Toast = ({ type, text, duration = 2500 }: Props) => {
   const { setError } = useCommentsStore();
   const { isMobile } = useIsMobile();
+  const { setWarningMessage } = useContext(FormContext);
 
   const MOTION_DIV_CLASSNAME = `min-w-70 w-fit max-w-100 h-min bg-white rounded-lg shadow-t-lg flex overflow-hidden absolute left-0 bottom-${
     isMobile ? 56 : 48
   }`;
 
   const handleClose = () => {
-    setError({ error: "" });
+    if (type === "error") {
+      setError({ error: "" });
+    }
+
+    if (type === "warning") {
+      setWarningMessage("");
+    }
   };
 
   useEffect(() => {
@@ -61,7 +69,7 @@ export const Toast = ({ type, text, duration = 22500 }: Props) => {
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="min-w-60 max-w-80 bg-white rounded-lg shadow-lg flex overflow-hidden"
+        className={MOTION_DIV_CLASSNAME}
       >
         <div className="w-2 bg-blue-400 shrink-0" />
 
@@ -94,7 +102,7 @@ export const Toast = ({ type, text, duration = 22500 }: Props) => {
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="min-w-70 w-fit max-w-100 h-min bg-white rounded-lg shadow-t-lg flex overflow-hidden absolute bottom-56"
+      className={MOTION_DIV_CLASSNAME}
     >
       <div className="w-2 bg-yellow-400 shrink-0" />
 

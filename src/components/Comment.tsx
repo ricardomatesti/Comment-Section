@@ -93,7 +93,7 @@ export const CommentWithoutAnimation = ({
 
   const SPAN_CLASS_NAME = `${
     !textExpanded ? "max-h-30 line-clamp-3" : "max-h-none"
-  } text-start text-md  text-gray-500`;
+  } text-start text-md overflow-hidden text-gray-500`;
 
   if (isMobile && editing) {
     return (
@@ -334,7 +334,7 @@ export const CommentWithoutAnimation = ({
                   </div>
                 )}
               </div>
-              <span className=" text-gray-500">
+              <span className="text-gray-500">
                 {formatDateToText({ date })}
               </span>
             </div>
