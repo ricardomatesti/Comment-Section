@@ -94,9 +94,8 @@ const RollingSingleDigit = ({
         animate={{ y: -digit * 32 }} // 32px es la altura del div (8*4 en tailwind)
         transition={{
           type: "spring",
-          stiffness: 100,
+          stiffness: 150,
           damping: 15,
-          duration: 4,
         }}
         className="flex flex-col"
       >

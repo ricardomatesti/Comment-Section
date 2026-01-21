@@ -5,6 +5,7 @@ import { UserContext } from "../contexts/userContext";
 import { FormContext } from "../contexts/formContext";
 import { Toast } from "./Toast";
 import { createPortal } from "react-dom";
+import { Image } from "./shared/Image";
 
 export const AddCommentSection = () => {
   const { isMobile } = useIsMobile();
@@ -42,7 +43,7 @@ export const AddCommentSection = () => {
             value={text}
           ></textarea>
           <div className="flex flex-row justify-between">
-            <img src={user.photo_url} className="w-10 h-10 rounded-[50%]"></img>
+            <Image src={user.photo_url}></Image>
 
             <button
               type="submit"
@@ -63,7 +64,7 @@ export const AddCommentSection = () => {
 
   return (
     <div className="bg-white mt-0 flex-none h-40 rounded-md flex flex-row gap-4 p-6 mb-4">
-      <img src={user.photo_url} className="w-12 h-12 rounded-[50%]"></img>
+      <Image h={12} w={12} src={user.photo_url} />
       <form
         className="w-full gap-4 flex flex-row"
         onSubmit={(e) => handleSubmit({ e })}

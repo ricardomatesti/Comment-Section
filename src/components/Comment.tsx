@@ -14,6 +14,7 @@ import { UpdateButton } from "./shared/UpdateButton";
 import { CancelButton } from "./shared/CancelButton";
 import { motion, AnimatePresence } from "motion/react";
 import { UserContext } from "../contexts/userContext";
+import { Image } from "./shared/Image";
 
 type Props = {
   id: number;
@@ -100,7 +101,7 @@ export const CommentWithoutAnimation = ({
       <div className="flex flex-col">
         <div className="bg-white min-h-fit-content flex-initial max-h-min flex flex-col rounded-lg gap-4 p-4 relative">
           <div className="flex flex-row justify items-center gap-4">
-            <img src={imgUrl} className="w-10 h-10 rounded-[50%]"></img>
+            <Image src={imgUrl}></Image>
             <div className="flex flex-row items-center gap-2">
               <span className="text-lg font-bold line-clamp-1">{userName}</span>
               {isYours && (
@@ -160,7 +161,7 @@ export const CommentWithoutAnimation = ({
       <div className="flex flex-col">
         <div className="bg-white min-h-fit-content flex-initial max-h-min flex flex-col rounded-lg gap-4 p-4 relative">
           <div className="flex flex-row justify items-center gap-4">
-            <img src={imgUrl} className="w-10 h-10 rounded-[50%]"></img>
+            <Image src={imgUrl}></Image>
             <div className="flex flex-row items-center gap-2">
               <span className="text-lg font-bold line-clamp-1">{userName}</span>
               {isYours && (
@@ -259,7 +260,7 @@ export const CommentWithoutAnimation = ({
           <div className="flex flex-col flex-1 w-100 gap-4">
             <div className="flex flex-row justify-between">
               <div className="flex flex-row justify items-center gap-4">
-                <img src={imgUrl} className="w-10 h-10 rounded-[50%]"></img>
+                <Image src={imgUrl}></Image>
                 <div className="flex flex-row items-center gap-2">
                   <span className="text-lg font-bold line-clamp-1">
                     {userName}
@@ -340,10 +341,11 @@ export const CommentWithoutAnimation = ({
           commentId={parentCommentId ? parentCommentId : id}
           replyId={parentCommentId ? id : undefined}
         ></Votes>
+
         <div className="flex flex-col flex-1 w-100 gap-4">
           <div className="flex flex-row justify-between">
             <div className="flex flex-row justify items-center gap-4">
-              <img src={imgUrl} className="w-10 h-10 rounded-[50%]"></img>
+              <Image src={imgUrl}></Image>
               <div className="flex flex-row items-center gap-2">
                 <span className="text-lg font-bold line-clamp-1">
                   {userName}

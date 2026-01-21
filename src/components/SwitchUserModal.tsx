@@ -1,6 +1,7 @@
 import { useContext, type Dispatch, type SetStateAction } from "react";
 import type { User } from "../hooks/useUsers";
 import { UserContext } from "../contexts/userContext";
+import { Image } from "./shared/Image";
 
 const users = [
   {
@@ -89,10 +90,14 @@ const UserButton = ({
         onclose(false);
       }}
     >
-      <img
+      <Image
         src={user.photo_url}
-        className="w-12 h-12 rounded-full border-0 border-white shadow-sm group-hover:scale-105 transition-transform"
-      />
+        h={12}
+        w={12}
+        className={
+          "rounded-full border-0 border-white shadow-sm group-hover:scale-105 transition-transform"
+        }
+      ></Image>
       <span className="font-bold text-white text-xl group-hover:">
         {user.name}
       </span>

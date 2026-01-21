@@ -6,6 +6,7 @@ import { UserContext } from "../contexts/userContext";
 import { AnimatePresence } from "motion/react";
 import { Toast } from "./Toast";
 import { createPortal } from "react-dom";
+import { Image } from "./shared/Image";
 
 type User = {
   id: number;
@@ -227,7 +228,7 @@ export const FakeComment = ({
       <div className="flex flex-col">
         <div className="bg-white min-h-fit-content flex-initial max-h-min flex flex-col rounded-lg gap-4 p-4 relative">
           <div className="flex flex-row justify items-center gap-4">
-            <img src={imgUrl} className="w-10 h-10 rounded-[50%]"></img>
+            <Image src={imgUrl}></Image>
             <div className="flex flex-row items-center gap-2">
               <span className="text-lg  text-gray-500 font-bold line-clamp-1">
                 {userName}
@@ -261,7 +262,7 @@ export const FakeComment = ({
         <div className="flex flex-col flex-1 w-100 gap-4">
           <div className="flex flex-row justify-between">
             <div className="flex flex-row justify items-center gap-4">
-              <img src={imgUrl} className="w-10 h-10 rounded-[50%]"></img>
+              <Image src={imgUrl}></Image>
               <div className="flex flex-row items-center gap-2">
                 <span className="text-lg text-gray-500 font-bold line-clamp-1">
                   {userName}

@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { SwitchUserModal } from "./SwitchUserModal";
 import { UserContext } from "../contexts/userContext";
+import { Image } from "./shared/Image";
 
 export const Header = () => {
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +28,7 @@ export const Header = () => {
             </button>
           )}
         </div>
-        <img src={user.photo_url} className="w-10 h-10 rounded-[50%]"></img>
+        <Image src={user.photo_url}></Image>
       </div>
 
       {showModal &&
