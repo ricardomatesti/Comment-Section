@@ -24,7 +24,7 @@ export const AddCommentSection = () => {
         >
           <textarea
             name="text"
-            className="w-full flex-1 border-gray-200 max-h-40 border border-solid rounded-md py-3 px-4 text-start text-md"
+            className="w-full flex-1 resize-none focus:border-[var(--purple-600)] focus:ring-1 focus:ring-[var(--purple-600)] transition-colors outline-none border-gray-200 max-h-40 border border-solid rounded-md py-3 px-4 text-start text-md"
             placeholder="Add a comment..."
             onChange={(e) => setText(e.target.value)}
             value={text}
@@ -53,7 +53,7 @@ export const AddCommentSection = () => {
       >
         <textarea
           name="text"
-          className="w-full flex-1 border-gray-200 max-h-29 border border-solid rounded-md py-3 px-4 text-start text-md"
+          className="w-full resize-none focus:border-[var(--purple-600)] focus:ring-1 focus:ring-[var(--purple-600)] transition-colors outline-none flex-1 border-gray-200 max-h-29 border border-solid rounded-md py-3 px-4 text-start text-md"
           placeholder="Add a comment..."
           onChange={(e) => setText(e.target.value)}
           value={text}

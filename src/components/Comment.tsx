@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useIsTextClamped } from "../hooks/useIsTextClamped";
 import { ReplyButton } from "./shared/ReplyButton";
@@ -13,6 +13,7 @@ import { DeleteCommentModal } from "./DeleteCommentModal";
 import { UpdateButton } from "./shared/UpdateButton";
 import { CancelButton } from "./shared/CancelButton";
 import { motion, AnimatePresence } from "motion/react";
+import { UserContext } from "../contexts/userContext";
 
 const root = document.getElementById("root");
 
@@ -84,6 +85,13 @@ export const CommentWithoutAnimation = ({
   const [textEditing, setTextEditing] = useState(text);
   const { isClamped, textRef } = useIsTextClamped(text);
   const { isMobile } = useIsMobile();
+  const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    setReplying(false);
+    setEditing(false);
+    setTextExpanded(false);
+  }, [user]);
 
   const SPAN_CLASS_NAME = `${
     !textExpanded ? "max-h-30 line-clamp-3" : "max-h-none"
@@ -107,21 +115,12 @@ export const CommentWithoutAnimation = ({
           </div>
 
           <textarea
-            className="w-full flex-1 border-gray-200 min-h-30 max-h-40 resize-none border border-solid rounded-md py-3 px-4 text-start text-md"
+            className="w-full flex-1 border-gray-200 focus:border-[var(--purple-600)] focus:ring-1 focus:ring-[var(--purple-600)] transition-colors outline-none min-h-30 max-h-40 resize-none border border-solid rounded-md py-3 px-4 text-start text-md"
             placeholder="Add a reply..."
             onChange={(e) => setTextEditing(e.target.value)}
             value={textEditing}
           ></textarea>
 
-          {isClamped && (
-            <div className="flex flex-row justify-end items-end mt-2 mb-0">
-              <ReadMoreButton
-                isClamped={isClamped}
-                setTextExpanded={setTextExpanded}
-                textExpanded={textExpanded}
-              />
-            </div>
-          )}
           <div className="flex flex-row justify-between">
             <Votes orientation="horizontal" votes={votes}></Votes>
             {!isYours ? (
@@ -280,7 +279,7 @@ export const CommentWithoutAnimation = ({
             </div>
 
             <textarea
-              className="w-full flex-1 border-gray-200 min-h-35 max-h-40 resize-none border border-solid rounded-md py-3 px-4 text-start text-md"
+              className="w-full flex-1 border-gray-200 focus:border-[var(--purple-600)] focus:ring-1 focus:ring-[var(--purple-600)] transition-colors outline-none min-h-35 max-h-40 resize-none border border-solid rounded-md py-3 px-4 text-start text-md"
               placeholder="Add a reply..."
               onChange={(e) => setTextEditing(e.target.value)}
               value={textEditing}
