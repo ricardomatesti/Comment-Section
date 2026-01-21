@@ -38,7 +38,6 @@ export const CommentSection = () => {
             isMobile={isMobile}
           ></FakeComment>
         </div>
-        <span className="text-2xl font-medium text-(--purple-400) "></span>
       </div>
     );
   }
