@@ -12,7 +12,7 @@ import { createPortal } from "react-dom";
 import { DeleteCommentModal } from "./DeleteCommentModal";
 import { UpdateButton } from "./shared/UpdateButton";
 import { CancelButton } from "./shared/CancelButton";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { UserContext } from "../contexts/userContext";
 import { Image } from "./shared/Image";
 

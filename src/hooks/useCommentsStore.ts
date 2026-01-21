@@ -115,7 +115,7 @@ interface CommentsState {
   }) => void;
 }
 
-export const useCommentsStore = create<CommentsState>((set, get) => ({
+export const useCommentsStore = create<CommentsState>((set) => ({
   comments: [],
   commentsLoading: false,
   addCommentLoading: false,
@@ -194,7 +194,6 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
         throw new Error("Unexpected error adding comment");
       }
 
@@ -288,7 +287,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        //const errorData = await response.json();
         //Normally we would throw JSON.stringify(errorData) ||"Error adding reply"
         throw new Error("Unexpected error adding reply");
       }
@@ -337,7 +336,6 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
         throw new Error("Unexpected error deleting comment");
       }
 
@@ -374,7 +372,6 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
         throw new Error("Unexpected error deleting reply");
       }
 
@@ -425,7 +422,6 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
         throw new Error("Unexpected error updating comment");
       }
       setText(text);
@@ -472,7 +468,6 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
         throw new Error("Unexpected error updating reply");
       }
       setText(text);
@@ -506,11 +501,9 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
   },
   changeCommentVotes: async ({
     commentId,
-    oldVotes,
     newVotes,
   }: {
     commentId: number;
-    oldVotes: number;
     newVotes: number;
   }) => {
     try {
@@ -524,7 +517,6 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
         throw new Error("Unexpected error updating votes");
       }
 
@@ -549,12 +541,10 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
   changeReplyVotes: async ({
     replyId,
     commentId,
-    oldVotes,
     newVotes,
   }: {
     commentId: number;
     replyId: number;
-    oldVotes: number;
     newVotes: number;
   }) => {
     try {
@@ -568,7 +558,6 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
         throw new Error("Unexpected error updating votes");
       }
 
