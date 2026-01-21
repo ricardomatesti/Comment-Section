@@ -3,7 +3,7 @@ import { useIsMobile } from "../hooks/useIsMobile";
 import { Comment } from "./Comment";
 import { useCommentsStore } from "../hooks/useCommentsStore";
 import { UserContext } from "../contexts/userContext";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
 
 type User = {
   id: number;
@@ -23,6 +23,25 @@ export const CommentSection = () => {
       scrollToComment({ commentRef });
     }
   }, [comments]);
+
+  if (comments.length === 0) {
+    return (
+      <div className="flex flex-col gap-4 min-h-0 h-full justify-center overflow-y-auto [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)]">
+        <div className="w-full min-h-16"></div>
+        <span className="text-3xl font-medium text-(--purple-400) ">
+          No comments here yet... Be the first one!
+        </span>
+        <div className="opacity-50">
+          <FakeComment
+            imgUrl={userSignedUp.photo_url}
+            userName={userSignedUp.name}
+            isMobile={isMobile}
+          ></FakeComment>
+        </div>
+        <span className="text-2xl font-medium text-(--purple-400) "></span>
+      </div>
+    );
+  }
 
   if (isMobile) {
     return (
@@ -173,6 +192,81 @@ const RepliesToThisComment = ({
             );
           })}
         </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
+export const FakeComment = ({
+  imgUrl,
+  userName,
+  isMobile,
+}: {
+  imgUrl: string;
+  userName: string;
+  isMobile: boolean;
+}) => {
+  if (isMobile) {
+    return (
+      <div className="flex flex-col">
+        <div className="bg-white min-h-fit-content flex-initial max-h-min flex flex-col rounded-lg gap-4 p-4 relative">
+          <div className="flex flex-row justify items-center gap-4">
+            <img src={imgUrl} className="w-10 h-10 rounded-[50%]"></img>
+            <div className="flex flex-row items-center gap-2">
+              <span className="text-lg  text-gray-500 font-bold line-clamp-1">
+                {userName}
+              </span>
+
+              <div className="bg-(--purple-600) px-2 py-0 rounded-sm items-center flex flex-row">
+                <span className="text-sm text-white">you</span>
+              </div>
+            </div>
+            <span className="text-gray-500">Today</span>
+          </div>
+
+          <span
+            className={
+              "max-h-30 line-clamp-3 text-start text-md  text-gray-500"
+            }
+          >
+            This could be your first comment!
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col">
+      <div
+        className="bg-white min-h-fit-content flex-initial 
+ max-h-100 flex flex-row gap-10 rounded-lg p-6 relative"
+      >
+        <div className="flex flex-col flex-1 w-100 gap-4">
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify items-center gap-4">
+              <img src={imgUrl} className="w-10 h-10 rounded-[50%]"></img>
+              <div className="flex flex-row items-center gap-2">
+                <span className="text-lg text-gray-500 font-bold line-clamp-1">
+                  {userName}
+                </span>
+
+                <div className="bg-(--purple-600) px-2 py-0 rounded-sm items-center flex flex-row">
+                  <span className="text-sm  text-white">you</span>
+                </div>
+              </div>
+              <span className=" text-gray-500">Today</span>
+            </div>
+          </div>
+
+          <span
+            className={
+              "max-h-30 line-clamp-3 text-start text-md  text-gray-500"
+            }
+          >
+            This could be your first comment
+          </span>
+        </div>
       </div>
     </div>
   );
