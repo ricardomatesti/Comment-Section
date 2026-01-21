@@ -12,6 +12,7 @@ import { createPortal } from "react-dom";
 import { DeleteCommentModal } from "./DeleteCommentModal";
 import { UpdateButton } from "./shared/UpdateButton";
 import { CancelButton } from "./shared/CancelButton";
+import { motion, AnimatePresence } from "motion/react";
 
 const root = document.getElementById("root");
 
@@ -24,9 +25,47 @@ type Props = {
   userName: string;
   votes: number;
   isYours?: boolean;
+  optimisticComment?: boolean;
 };
 
 export const Comment = ({
+  // TODO pasar el comment entero en vez de cada prop xD
+  id,
+  parentCommentId,
+  text,
+  imgUrl,
+  date,
+  userName,
+  votes,
+  isYours = false,
+  optimisticComment = false,
+}: Props) => {
+  return (
+    <motion.div
+      key={id + " - " + parentCommentId}
+      initial={{ opacity: 0, y: 10, x: -500 }}
+      animate={{ opacity: 1, y: 0, x: 0 }}
+      exit={
+        !optimisticComment
+          ? { opacity: 0, scale: 0.5, transition: { duration: 0.2 } }
+          : {}
+      }
+    >
+      <CommentWithoutAnimation
+        id={id}
+        parentCommentId={parentCommentId}
+        text={text}
+        imgUrl={imgUrl}
+        date={date}
+        userName={userName}
+        votes={votes}
+        isYours={isYours}
+      ></CommentWithoutAnimation>
+    </motion.div>
+  );
+};
+
+export const CommentWithoutAnimation = ({
   // TODO pasar el comment entero en vez de cada prop xD
   id,
   parentCommentId,
@@ -110,20 +149,6 @@ export const Comment = ({
             )}
           </div>
         </div>
-        <ReplyToComment
-          replying={replying}
-          setReplying={setReplying}
-          commentId={parentCommentId ? parentCommentId : id}
-        ></ReplyToComment>
-        {showModal &&
-          createPortal(
-            <DeleteCommentModal
-              commentId={parentCommentId ? parentCommentId : id}
-              replyId={parentCommentId ? id : undefined}
-              onClose={setShowModal}
-            />,
-            root ?? document.body
-          )}
       </div>
     );
   }
@@ -178,11 +203,26 @@ export const Comment = ({
             )}
           </div>
         </div>
-        <ReplyToComment
-          replying={replying}
-          setReplying={setReplying}
-          commentId={parentCommentId ? parentCommentId : id}
-        ></ReplyToComment>
+        <AnimatePresence>
+          {replying && (
+            <motion.div
+              key="box"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                duration: 0.2,
+                scale: { type: "keyframes", visualDuration: 0.2, bounce: 0.5 },
+              }}
+              exit={{ opacity: 0, animationDuration: 0.1 }}
+            >
+              <ReplyToComment
+                replying={true}
+                setReplying={setReplying}
+                commentId={parentCommentId ? parentCommentId : id}
+              ></ReplyToComment>
+            </motion.div>
+          )}
+        </AnimatePresence>
         {showModal &&
           createPortal(
             <DeleteCommentModal
@@ -263,11 +303,6 @@ export const Comment = ({
             </div>
           </div>
         </div>
-        <ReplyToComment
-          replying={replying}
-          setReplying={setReplying}
-          commentId={parentCommentId ? parentCommentId : id}
-        ></ReplyToComment>
         {showModal &&
           createPortal(
             <DeleteCommentModal
@@ -336,11 +371,24 @@ export const Comment = ({
           )}
         </div>
       </div>
-      <ReplyToComment
-        replying={replying}
-        setReplying={setReplying}
-        commentId={parentCommentId ? parentCommentId : id}
-      ></ReplyToComment>
+      {replying && (
+        <motion.div
+          key="box"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 0.2,
+            scale: { type: "keyframes", visualDuration: 0.2, bounce: 0.5 },
+          }}
+          exit={{ opacity: 0, animationDuration: 0.1 }}
+        >
+          <ReplyToComment
+            replying={true}
+            setReplying={setReplying}
+            commentId={parentCommentId ? parentCommentId : id}
+          ></ReplyToComment>
+        </motion.div>
+      )}
       {showModal &&
         createPortal(
           <DeleteCommentModal

@@ -1,8 +1,8 @@
 import { useIsMobile } from "../hooks/useIsMobile";
-import { type FormEvent } from "react";
+import { useContext, type FormEvent } from "react";
 import { useCommentsStore } from "../hooks/useCommentsStore";
 import { useState } from "react";
-import { useUser } from "../hooks/useUser";
+import { UserContext } from "../contexts/userContext";
 
 export const ReplyToComment = ({
   commentId,
@@ -15,7 +15,7 @@ export const ReplyToComment = ({
 }) => {
   const { isMobile } = useIsMobile();
   const { addReply } = useCommentsStore();
-  const user = useUser();
+  const { user } = useContext(UserContext);
 
   const [text, setText] = useState("");
 

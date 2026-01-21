@@ -3,6 +3,7 @@ import { useIsMobile } from "../hooks/useIsMobile";
 import { Comment } from "./Comment";
 import { useCommentsStore } from "../hooks/useCommentsStore";
 import { UserContext } from "../contexts/userContext";
+import { AnimatePresence, motion } from "motion/react";
 
 type User = {
   id: number;
@@ -43,6 +44,7 @@ export const CommentSection = () => {
                   userName={comment.user_name}
                   votes={comment.votes}
                   isYours={comment.user === userSignedUp.id}
+                  optimisticComment={comment.optimistic_comment}
                 ></Comment>
                 <RepliesToThisComment
                   parentCommentId={comment.id}
@@ -61,32 +63,35 @@ export const CommentSection = () => {
   return (
     <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)] ">
       <div className="w-full min-h-16"></div>
-      {comments.length > 0 &&
-        comments.map((comment) => {
-          return (
-            <div
-              className="flex flex-col gap-4"
-              key={comment.id}
-              ref={comment.id === commentToScrollId ? commentRef : null}
-            >
-              <Comment
-                id={comment.id}
-                text={comment.text}
-                imgUrl={comment.user_photo_url}
-                date={comment.date}
-                userName={comment.user_name}
-                votes={comment.votes}
-                isYours={comment.user === userSignedUp.id}
-              ></Comment>
-              <RepliesToThisComment
-                parentCommentId={comment.id}
-                isMobile={isMobile}
-                replies={comment.replies}
-                userSignedUp={userSignedUp}
-              ></RepliesToThisComment>
-            </div>
-          );
-        })}
+      <AnimatePresence>
+        {comments.length > 0 &&
+          comments.map((comment) => {
+            return (
+              <div
+                className="flex flex-col gap-4"
+                key={comment.id}
+                ref={comment.id === commentToScrollId ? commentRef : null}
+              >
+                <Comment
+                  id={comment.id}
+                  text={comment.text}
+                  imgUrl={comment.user_photo_url}
+                  date={comment.date}
+                  userName={comment.user_name}
+                  votes={comment.votes}
+                  isYours={comment.user === userSignedUp.id}
+                  optimisticComment={comment.optimistic_comment}
+                ></Comment>
+                <RepliesToThisComment
+                  parentCommentId={comment.id}
+                  isMobile={isMobile}
+                  replies={comment.replies}
+                  userSignedUp={userSignedUp}
+                ></RepliesToThisComment>
+              </div>
+            );
+          })}
+      </AnimatePresence>
       <div className="mt-4"></div>
     </div>
   );
@@ -107,6 +112,7 @@ type Reply = {
   user_name: string;
   votes: number;
   user_photo_url: string;
+  optimistic_comment?: boolean;
 };
 
 const RepliesToThisComment = ({
@@ -122,6 +128,34 @@ const RepliesToThisComment = ({
       <div className="flex flex-row">
         <div className="w-[2px] flex-[1 none] bg-gray-300 ml-4 mr-4"></div>
         <div className="flex flex-col gap-4 grow">
+          <AnimatePresence>
+            {replies.map((reply) => {
+              return (
+                <Comment
+                  key={reply.id}
+                  id={reply.id}
+                  parentCommentId={parentCommentId}
+                  text={reply.text}
+                  imgUrl={reply.user_photo_url}
+                  date={reply.date}
+                  userName={reply.user_name}
+                  votes={reply.votes}
+                  isYours={reply.user === userSignedUp.id}
+                  optimisticComment={reply.optimistic_comment}
+                ></Comment>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-row">
+      <div className="w-[2px] flex-[1 none] bg-gray-300 ml-10 mr-10"></div>
+      <div className="flex flex-col gap-4 grow">
+        <AnimatePresence>
           {replies.map((reply) => {
             return (
               <Comment
@@ -134,33 +168,11 @@ const RepliesToThisComment = ({
                 userName={reply.user_name}
                 votes={reply.votes}
                 isYours={reply.user === userSignedUp.id}
+                optimisticComment={reply.optimistic_comment}
               ></Comment>
             );
           })}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-row">
-      <div className="w-[2px] flex-[1 none] bg-gray-300 ml-10 mr-10"></div>
-      <div className="flex flex-col gap-4 grow">
-        {replies.map((reply) => {
-          return (
-            <Comment
-              key={reply.id}
-              id={reply.id}
-              parentCommentId={parentCommentId}
-              text={reply.text}
-              imgUrl={reply.user_photo_url}
-              date={reply.date}
-              userName={reply.user_name}
-              votes={reply.votes}
-              isYours={reply.user === userSignedUp.id}
-            ></Comment>
-          );
-        })}
+        </AnimatePresence>
       </div>
     </div>
   );

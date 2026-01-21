@@ -1,3 +1,4 @@
+import { tr } from "motion/react-client";
 import { type User } from "./useUsers";
 import { create } from "zustand";
 
@@ -10,6 +11,7 @@ export type CommentType = {
   user_photo_url: string;
   votes: number;
   replies: Reply[];
+  optimistic_comment?: boolean;
 };
 
 export type Reply = {
@@ -21,6 +23,7 @@ export type Reply = {
   user_photo_url: string;
   comment: number;
   votes: number;
+  optimistic_comment?: boolean;
 };
 
 interface CommentsState {
@@ -138,6 +141,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       user_name: user.name,
       votes: 0,
       user: user.id,
+      optimistic_comment: true,
     };
 
     set((state) => ({
@@ -226,6 +230,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       user: user.id,
       votes: 0,
       comment: commentId,
+      optimistic_comment: true,
     };
 
     set((state) => ({
