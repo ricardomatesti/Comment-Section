@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 #root {
+  --purple-end: hsla(240, 62%, 95%, 99%);
+  --purple-start: #eaeafa;
   --purple-100: hsla(240, 58%, 85%, 0.331);
   --purple-200: hsl(239, 57%, 85%);
   --purple-400: hsl(239, 64%, 73%);

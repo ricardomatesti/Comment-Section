@@ -160,6 +160,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
           user_photo_url: user.photo_url,
           user_name: user.name,
           user: user.id,
+          votes: 0,
         }),
       });
 
@@ -252,6 +253,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
           user_name: user.name,
           user: user.id,
           comment: commentId,
+          votes: 0,
         }),
       });
 
@@ -312,7 +314,7 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
       }
 
       set((state) => ({
-        comments: [...state.comments.slice(0, -1)],
+        comments: [...state.comments.filter((c) => c.id !== commentId)],
       }));
     } catch (err) {
       let mensajeError = "Unknown Error";

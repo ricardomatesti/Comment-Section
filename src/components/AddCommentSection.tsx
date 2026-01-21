@@ -1,14 +1,11 @@
 import { useIsMobile } from "../hooks/useIsMobile";
-import { useState, type FormEvent } from "react";
-import { type User } from "../hooks/useUsers";
+import { useContext, useState, type FormEvent } from "react";
 import { useCommentsStore } from "../hooks/useCommentsStore";
+import { UserContext } from "../contexts/userContext";
 
-type Props = {
-  user: User;
-};
-
-export const AddCommentSection = ({ user }: Props) => {
+export const AddCommentSection = () => {
   const { isMobile } = useIsMobile();
+  const { user } = useContext(UserContext);
   const { addComment } = useCommentsStore();
 
   const [text, setText] = useState("");

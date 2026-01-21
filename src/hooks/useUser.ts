@@ -11,7 +11,7 @@ export const useUser = () => {
       id: 3,
       name: "Jarfaiter",
       photo_url:
-        "https://cdn.aragonmusical.com/wp-content/uploads/2022/01/Jarfaiter.jpg",
+        "https://i1.sndcdn.com/artworks-000148427018-oorx39-t500x500.jpg",
       email: "jarfa@gmail.com",
     },
   ];

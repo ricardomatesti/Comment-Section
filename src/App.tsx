@@ -1,22 +1,21 @@
 import "./App.css";
-
 import { CommentSection } from "./components/CommentSection.js";
 import { AddCommentSection } from "./components/AddCommentSection.js";
-import { useUser } from "./hooks/useUser.js";
-
+import { Header } from "./components/Header.js";
+import { UserProvider } from "./contexts/userContext.js";
 function App() {
-  const userSignedUp = useUser();
-
   return (
-    <>
+    <UserProvider>
       <main className="w-full flex flex-row justify-center items-center">
-        <div className="max-w-200 flex-initial w-full h-[100vh] flex flex-col justify-between gap-0 mx-4 overflow-hidden">
-          <CommentSection userSignedUp={userSignedUp}></CommentSection>
+        <div className="max-w-200 flex-initial w-full h-[100vh] flex flex-col justify-between gap-0 mx-4 overflow-hidden relative">
+          <Header></Header>
 
-          <AddCommentSection user={userSignedUp}></AddCommentSection>
+          <CommentSection></CommentSection>
+
+          <AddCommentSection></AddCommentSection>
         </div>
       </main>
-    </>
+    </UserProvider>
   );
 }
 

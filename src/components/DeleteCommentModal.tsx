@@ -15,14 +15,16 @@ export const DeleteCommentModal = ({
   const handleDelete = () => {
     if (replyId) {
       deleteReply({ parentCommentId: commentId, replyId });
+      onClose(false);
       return;
     }
     deleteComment({ commentId });
+    onClose(false);
   };
 
   return (
     <div
-      className="fixed w-screen h-screen top-0 left-0 flex justify-center items-center bg-[#00000066]"
+      className="fixed w-screen h-screen top-0 left-0 flex justify-center items-center bg-[#00000066] z-20"
       onClick={() => {
         onClose(false);
       }}

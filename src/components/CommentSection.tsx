@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { Comment } from "./Comment";
 import { useCommentsStore } from "../hooks/useCommentsStore";
+import { UserContext } from "../contexts/userContext";
 
 type User = {
   id: number;
@@ -10,12 +11,9 @@ type User = {
   email: string;
 };
 
-type Props = {
-  userSignedUp: User;
-};
-
-export const CommentSection = ({ userSignedUp }: Props) => {
+export const CommentSection = () => {
   const { isMobile } = useIsMobile();
+  const { user: userSignedUp } = useContext(UserContext);
   const commentRef = useRef<HTMLDivElement>(null);
   const { comments, commentToScrollId, scrollToComment } = useCommentsStore();
 
@@ -28,6 +26,7 @@ export const CommentSection = ({ userSignedUp }: Props) => {
   if (isMobile) {
     return (
       <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)]">
+        <div className="w-full min-h-16"></div>
         {comments.length > 0 &&
           comments.map((comment) => {
             return (
@@ -60,7 +59,8 @@ export const CommentSection = ({ userSignedUp }: Props) => {
   }
 
   return (
-    <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)]">
+    <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)] ">
+      <div className="w-full min-h-16"></div>
       {comments.length > 0 &&
         comments.map((comment) => {
           return (
