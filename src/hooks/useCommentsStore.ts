@@ -1,6 +1,7 @@
 import { tr } from "motion/react-client";
 import { type User } from "./useUsers";
 import { create } from "zustand";
+import type { Votes } from "../components/shared/Votes";
 
 export type CommentType = {
   date: string;
@@ -86,6 +87,26 @@ interface CommentsState {
     text: string;
     oldText: string;
     setText: any;
+  }) => void;
+  changeCommentVotes: ({
+    commentId,
+    oldVotes,
+    newVotes,
+  }: {
+    commentId: number;
+    oldVotes: number;
+    newVotes: number;
+  }) => void;
+  changeReplyVotes: ({
+    replyId,
+    commentId,
+    oldVotes,
+    newVotes,
+  }: {
+    commentId: number;
+    replyId: number;
+    oldVotes: number;
+    newVotes: number;
   }) => void;
   scrollToComment: ({
     commentRef,
@@ -492,6 +513,108 @@ export const useCommentsStore = create<CommentsState>((set, get) => ({
         mensajeError = err;
       }
       setText(oldText);
+      set({ error: mensajeError });
+    }
+  },
+  changeCommentVotes: async ({
+    commentId,
+    oldVotes,
+    newVotes,
+  }: {
+    commentId: number;
+    oldVotes: number;
+    newVotes: number;
+  }) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/comment/${commentId}/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ votes: newVotes }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error("Unexpected error updating votes");
+      }
+
+      set((state) => ({
+        comments: [
+          ...state.comments.map((c) =>
+            c.id === commentId ? { ...c, votes: newVotes } : c
+          ),
+        ],
+      }));
+    } catch (err) {
+      let mensajeError = "Unknown Error";
+
+      if (err instanceof Error) {
+        mensajeError = err.message;
+      } else if (typeof err === "string") {
+        mensajeError = err;
+      }
+      set({ error: mensajeError });
+    }
+  },
+  changeReplyVotes: async ({
+    replyId,
+    commentId,
+    oldVotes,
+    newVotes,
+  }: {
+    commentId: number;
+    replyId: number;
+    oldVotes: number;
+    newVotes: number;
+  }) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/reply/${replyId}/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ votes: newVotes }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error("Unexpected error updating votes");
+      }
+
+      set((state) => ({
+        comments: [
+          ...state.comments.map((c) =>
+            c.id === commentId
+              ? {
+                  ...c,
+                  replies: [
+                    ...c.replies.map((r) =>
+                      r.id === replyId ? { ...r, votes: newVotes } : r
+                    ),
+                  ],
+                }
+              : c
+          ),
+        ],
+      }));
+    } catch (err) {
+      let mensajeError = "Unknown Error";
+
+      if (err instanceof Error) {
+        mensajeError = err.message;
+      } else if (typeof err === "string") {
+        mensajeError = err;
+      }
+
       set({ error: mensajeError });
     }
   },

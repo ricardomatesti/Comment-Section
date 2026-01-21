@@ -49,33 +49,35 @@ export const CommentSection = () => {
     return (
       <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)]">
         <div className="w-full min-h-16"></div>
-        {comments.length > 0 &&
-          comments.map((comment) => {
-            return (
-              <div
-                className="flex flex-col gap-4"
-                key={comment.id}
-                ref={comment.id === commentToScrollId ? commentRef : null}
-              >
-                <Comment
-                  id={comment.id}
-                  text={comment.text}
-                  imgUrl={comment.user_photo_url}
-                  date={comment.date}
-                  userName={comment.user_name}
-                  votes={comment.votes}
-                  isYours={comment.user === userSignedUp.id}
-                  optimisticComment={comment.optimistic_comment}
-                ></Comment>
-                <RepliesToThisComment
-                  parentCommentId={comment.id}
-                  isMobile={isMobile}
-                  replies={comment.replies}
-                  userSignedUp={userSignedUp}
-                ></RepliesToThisComment>
-              </div>
-            );
-          })}
+        <AnimatePresence>
+          {comments.length > 0 &&
+            comments.map((comment) => {
+              return (
+                <div
+                  className="flex flex-col gap-4"
+                  key={comment.id}
+                  ref={comment.id === commentToScrollId ? commentRef : null}
+                >
+                  <Comment
+                    id={comment.id}
+                    text={comment.text}
+                    imgUrl={comment.user_photo_url}
+                    date={comment.date}
+                    userName={comment.user_name}
+                    votes={comment.votes}
+                    isYours={comment.user === userSignedUp.id}
+                    optimisticComment={comment.optimistic_comment}
+                  ></Comment>
+                  <RepliesToThisComment
+                    parentCommentId={comment.id}
+                    isMobile={isMobile}
+                    replies={comment.replies}
+                    userSignedUp={userSignedUp}
+                  ></RepliesToThisComment>
+                </div>
+              );
+            })}
+        </AnimatePresence>
         <div className="mt-4"></div>
         {error &&
           error !== "" &&

@@ -120,7 +120,12 @@ export const CommentWithoutAnimation = ({
           ></textarea>
 
           <div className="flex flex-row justify-between">
-            <Votes orientation="horizontal" votes={votes}></Votes>
+            <Votes
+              orientation="horizontal"
+              votes={votes}
+              commentId={parentCommentId ? parentCommentId : id}
+              replyId={parentCommentId ? id : undefined}
+            ></Votes>
             {!isYours ? (
               <ReplyButton
                 replying={replying}
@@ -180,7 +185,12 @@ export const CommentWithoutAnimation = ({
             </div>
           )}
           <div className="flex flex-row justify-between">
-            <Votes orientation="horizontal" votes={votes}></Votes>
+            <Votes
+              orientation="horizontal"
+              votes={votes}
+              commentId={parentCommentId ? parentCommentId : id}
+              replyId={parentCommentId ? id : undefined}
+            ></Votes>
             {!isYours ? (
               <ReplyButton
                 replying={replying}
@@ -200,26 +210,26 @@ export const CommentWithoutAnimation = ({
             )}
           </div>
         </div>
-        <AnimatePresence>
-          {replying && (
-            <motion.div
-              key="box"
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 0.2,
-                scale: { type: "keyframes", visualDuration: 0.2, bounce: 0.5 },
-              }}
-              exit={{ opacity: 0, animationDuration: 0.1 }}
-            >
-              <ReplyToComment
-                replying={true}
-                setReplying={setReplying}
-                commentId={parentCommentId ? parentCommentId : id}
-              ></ReplyToComment>
-            </motion.div>
-          )}
-        </AnimatePresence>
+
+        {replying && (
+          <motion.div
+            key="box"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.2,
+              scale: { type: "keyframes", visualDuration: 0.2, bounce: 0.5 },
+            }}
+            exit={{ opacity: 0, animationDuration: 0.1 }}
+          >
+            <ReplyToComment
+              replying={true}
+              setReplying={setReplying}
+              commentId={parentCommentId ? parentCommentId : id}
+            ></ReplyToComment>
+          </motion.div>
+        )}
+
         {showModal &&
           createPortal(
             <DeleteCommentModal
@@ -240,7 +250,12 @@ export const CommentWithoutAnimation = ({
           className="bg-white min-h-fit-content flex-initial 
  max-h-100 flex flex-row gap-10 rounded-lg p-6 relative"
         >
-          <Votes orientation="vertical" votes={votes}></Votes>
+          <Votes
+            orientation="vertical"
+            votes={votes}
+            commentId={parentCommentId ? parentCommentId : id}
+            replyId={parentCommentId ? id : undefined}
+          ></Votes>
           <div className="flex flex-col flex-1 w-100 gap-4">
             <div className="flex flex-row justify-between">
               <div className="flex flex-row justify items-center gap-4">
@@ -319,7 +334,12 @@ export const CommentWithoutAnimation = ({
         className="bg-white min-h-fit-content flex-initial 
  max-h-100 flex flex-row gap-10 rounded-lg p-6 relative"
       >
-        <Votes orientation="vertical" votes={votes}></Votes>
+        <Votes
+          orientation="vertical"
+          votes={votes}
+          commentId={parentCommentId ? parentCommentId : id}
+          replyId={parentCommentId ? id : undefined}
+        ></Votes>
         <div className="flex flex-col flex-1 w-100 gap-4">
           <div className="flex flex-row justify-between">
             <div className="flex flex-row justify items-center gap-4">
