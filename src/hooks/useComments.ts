@@ -55,7 +55,6 @@ export const useComments = function (): ReturnType {
   >(undefined);
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [addCommentLoading, setAddCommentLoading] = useState(false);
-  const [addReplyLoading, setAddReplyLoading] = useState(false);
   const commentRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -161,43 +160,6 @@ export const useComments = function (): ReturnType {
       setComments((prev) => [...prev.slice(0, -1), res.data]);
       setText(text); //si el enviar comentario falla que no tenga que escribir el comentario de nuevo
       // TODO: Añadir aviso de que no se pudo guardar el comentario
-    }
-  };
-
-  const addReplyToDatabase = async (replyPayload: CommentPayload) => {
-    setAddReplyLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/reply/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // Aquí añadir el token si hubiera login: 'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(replyPayload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(JSON.stringify(errorData) || "Error adding comment");
-      }
-
-      const data = await response.json();
-      return { success: true, data };
-    } catch (err) {
-      let mensajeError = "Unknown Error";
-
-      if (err instanceof Error) {
-        mensajeError = err.message;
-      } else if (typeof err === "string") {
-        mensajeError = err;
-      }
-
-      setError(mensajeError);
-      return { success: false, error: mensajeError };
-    } finally {
-      setAddReplyLoading(false);
     }
   };
 

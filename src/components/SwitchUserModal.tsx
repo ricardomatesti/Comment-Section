@@ -39,8 +39,6 @@ export const SwitchUserModal = ({
 }: {
   onClose: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const handleSwitch = () => {};
-
   return (
     <div
       className="fixed w-screen h-screen top-0 left-0 flex justify-center items-center bg-[#00000066] z-20"
