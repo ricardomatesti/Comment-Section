@@ -12,19 +12,20 @@ const users = [
     email: "petergriffin@gmail.com",
   },
   {
-    id: 2,
-    name: "Ibai",
-    photo_url:
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/574228be-01ef-4eab-bc0e-a4f6b68bedba-profile_image-300x300.png",
-    email: "ibai@gmail.com",
-  },
-  {
     id: 3,
     name: "Jarfaiter",
     photo_url:
       "https://i1.sndcdn.com/artworks-000148427018-oorx39-t500x500.jpg",
     email: "jarfa@gmail.com",
   },
+  {
+    id: 2,
+    name: "Ibai",
+    photo_url:
+      "https://static-cdn.jtvnw.net/jtv_user_pictures/574228be-01ef-4eab-bc0e-a4f6b68bedba-profile_image-300x300.png",
+    email: "ibai@gmail.com",
+  },
+
   {
     id: 4,
     name: "Antonio Recio",
