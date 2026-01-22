@@ -30,7 +30,7 @@ export const AddCommentSection = () => {
 
   if (isMobile) {
     return (
-      <div className="bg-white mt-0 flex-none h-50 rounded-md flex flex-col gap-4 p-4 mb-4">
+      <div className="bg-white mt-0 flex-none h-50 rounded-t-md flex flex-col gap-4 p-4 mb-0">
         <form
           className="h-full flex flex-col gap-4"
           onSubmit={(e) => handleSubmit({ e })}

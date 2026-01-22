@@ -44,7 +44,7 @@ export const ReplyToComment = ({
             <Image src={user.photo_url}></Image>
 
             <button
-              className="bg-(--purple-600) border rounded-md h-12 px-6 text-white cursor-pointer active:opacity-50"
+              className="bg-(--purple-600) font-medium border rounded-md h-12 px-6 text-white cursor-pointer active:opacity-50"
               type="submit"
             >
               REPLY
@@ -69,7 +69,7 @@ export const ReplyToComment = ({
           value={text}
         ></textarea>
         <button
-          className="bg-(--purple-600) border rounded-md h-10 px-6 text-white cursor-pointer active:opacity-50"
+          className="bg-(--purple-600) font-medium border rounded-md h-10 px-6 text-white cursor-pointer active:opacity-50"
           type="submit"
         >
           REPLY

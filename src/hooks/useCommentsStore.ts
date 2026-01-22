@@ -229,6 +229,7 @@ export const useCommentsStore = create<CommentsState>((set) => ({
       behavior: "smooth",
       block: "start",
     });
+    set({ commentToScrollId: undefined });
   },
 
   addReply: async ({
