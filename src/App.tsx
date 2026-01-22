@@ -11,7 +11,7 @@ function App() {
       <main className="w-full flex flex-row justify-center items-center">
         <div
           id="app-wraper"
-          className="max-w-200 flex-initial w-full h-[100vh] flex flex-col justify-between gap-0 mx-4 overflow-hidden relative"
+          className="max-w-200 flex-initial w-full h-[100dvh] flex flex-col justify-between gap-0 mx-4 overflow-hidden relative"
         >
           <Header></Header>
 

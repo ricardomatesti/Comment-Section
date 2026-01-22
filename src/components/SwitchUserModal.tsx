@@ -2,6 +2,7 @@ import { useContext, type Dispatch, type SetStateAction } from "react";
 import type { User } from "../hooks/useUsers";
 import { UserContext } from "../contexts/userContext";
 import { Image } from "./shared/Image";
+import useIsMobile from "../hooks/useIsMobile";
 
 const users = [
   {
@@ -40,6 +41,41 @@ export const SwitchUserModal = ({
 }: {
   onClose: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const { isMobile } = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <div
+        className="fixed w-screen h-screen top-0 left-0 flex justify-center items-center bg-[#00000066] z-20"
+        onClick={() => {
+          onClose(false);
+        }}
+      >
+        <div
+          className="flex flex-col bg-white rounded-xl p-6 w-100 gap-4"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <span className="font-semibold text-3xl text-(--purple-600)">
+            Choose User
+          </span>
+          <div className="flex flex-row gap-2 flex-wrap">
+            {users.map((user) => {
+              return (
+                <UserButton
+                  key={user.id}
+                  user={user}
+                  onclose={onClose}
+                ></UserButton>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="fixed w-screen h-screen top-0 left-0 flex justify-center items-center bg-[#00000066] z-20"
@@ -79,7 +115,30 @@ const UserButton = ({
   user: User;
   onclose: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const { isMobile } = useIsMobile();
   const { setUser } = useContext(UserContext);
+
+  if (isMobile) {
+    return (
+      <button
+        className="flex flex-1 basis-auto flex-row gap-2 items-center px-2 py-2 rounded-xl border-2 border-transparent bg-(--purple-600) hover: cursor-pointer transition-all group active:opacity-70"
+        onClick={() => {
+          setUser(user);
+          onclose(false);
+        }}
+      >
+        <Image
+          src={user.photo_url}
+          className={
+            "rounded-full border-0 border-white shadow-sm group-hover:scale-105 transition-transform"
+          }
+        ></Image>
+        <span className="font-bold text-white text-lg group-hover:">
+          {user.name}
+        </span>
+      </button>
+    );
+  }
 
   return (
     <button
