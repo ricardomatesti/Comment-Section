@@ -19,14 +19,39 @@ export const CommentSection = () => {
   const { isMobile } = useIsMobile();
   const { user: userSignedUp } = useContext(UserContext);
   const commentRef = useRef<HTMLDivElement>(null);
-  const { comments, commentToScrollId, scrollToComment, error } =
-    useCommentsStore();
+  const {
+    comments,
+    commentToScrollId,
+    scrollToComment,
+    error,
+    commentsLoading,
+  } = useCommentsStore();
 
   useEffect(() => {
     if (commentToScrollId) {
       scrollToComment({ commentRef });
     }
   }, [comments]);
+
+  if (commentsLoading) {
+    return (
+      <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto basis-full [mask-image:linear-gradient(to_bottom,black_94%,transparent_100%)] ">
+        <div className="w-full min-h-16"></div>
+        <div className="flex flex-col gap-4">
+          <SkeletonComment
+            textSkeletonHeight={isMobile ? 25 : 35}
+          ></SkeletonComment>
+          <div className="flex flex-row">
+            <div className="w-[2px] flex-[1 none] bg-gray-300 ml-4 mr-4"></div>
+            <div className="flex flex-col gap-4 grow">
+              <SkeletonComment textSkeletonHeight={10}></SkeletonComment>
+            </div>
+          </div>
+        </div>
+        <SkeletonComment textSkeletonHeight={25}></SkeletonComment>
+      </div>
+    );
+  }
 
   if (comments.length === 0) {
     return (
@@ -285,6 +310,106 @@ export const FakeComment = ({
           </span>
         </div>
       </div>
+    </div>
+  );
+};
+
+const SkeletonComment = ({
+  textSkeletonHeight = 35,
+}: {
+  textSkeletonHeight?: number;
+}) => {
+  const { isMobile } = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <div className="flex flex-col">
+        <div className="bg-white min-h-fit-content flex-initial max-h-min flex flex-col rounded-lg gap-4 p-4 relative">
+          <div className="flex flex-row justify items-center gap-4">
+            <div
+              className={`w-10 h-10 rounded-[50%] bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+            />
+            <div className="flex flex-row items-center gap-2">
+              <div
+                className={`w-35 h-10 rounded-lg bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+              />
+            </div>
+          </div>
+
+          <div
+            className={`rounded-lg w-full h-${textSkeletonHeight} bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+          ></div>
+          <div className="flex flex-row justify-between">
+            <VotesSkeleton orientation="horizontal"></VotesSkeleton>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col basis-full">
+      <div
+        className="bg-white min-h-fit-content flex-initial 
+ max-h-100 flex flex-row gap-10 rounded-lg p-6 relative"
+      >
+        <VotesSkeleton orientation="vertical"></VotesSkeleton>
+
+        <div className="flex flex-col flex-1 w-100 gap-4">
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify items-center gap-4">
+              <div
+                className={`w-10 h-10 rounded-[50%] bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+              />
+              <div className="flex flex-row items-center gap-2">
+                <div
+                  className={`w-35 h-10 rounded-lg bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            className={`rounded-lg w-full h-${textSkeletonHeight} bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+          ></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+type VotesProp = {
+  orientation: "horizontal" | "vertical";
+};
+
+const VotesSkeleton = ({ orientation }: VotesProp) => {
+  if (orientation === "horizontal") {
+    return (
+      <div className="h-10 w-25 bg-(--purple-100) rounded-lg flex-none flex flex-row items-center justify-between">
+        <button className="w-8 h-8 cursor-pointer text-(--purple-400) text-lg font-bold">
+          +
+        </button>
+        <div
+          className={`w-8 h-6 rounded-lg bg-(--purple-200) animate-pulse duration-50 from-(--purple-400) via-(--purple-200) to-(--purple-400) `}
+        />
+        <button className="w-8 h-8 cursor-pointer text-(--purple-400) font-bold">
+          <span className="text-lg scale-x-200">-</span>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-25 w-10 bg-(--purple-100) rounded-lg flex-none flex flex-col items-center justify-between">
+      <button className="w-8 h-8 cursor-pointer text-(--purple-400) text-lg font-bold">
+        +
+      </button>
+      <div
+        className={`w-6 h-8 rounded-lg bg-(--purple-200) animate-pulse duration-50 from-(--purple-400) via-(--purple-200) to-(--purple-400) `}
+      />
+      <button className="w-8 h-8 cursor-pointer text-(--purple-400) font-bold">
+        <span className="text-lg scale-x-200">-</span>
+      </button>
     </div>
   );
 };
