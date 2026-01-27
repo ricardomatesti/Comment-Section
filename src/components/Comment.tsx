@@ -20,6 +20,7 @@ import {
   CommentContext,
   CommentContextProvider,
 } from "../contexts/commentContext";
+import { FormContextProvider } from "../contexts/formContext";
 
 type Props = {
   comment: CommentType | ReplyType;
@@ -91,8 +92,12 @@ export const CommentWithoutAnimation = ({
     setReplying(false);
     setEditing(false);
     setTextExpanded(false);
-    setTextEditing(text);
   }, [user]);
+
+  useEffect(() => {
+    // esto es un smell no me mola nada
+    setTextEditing(text);
+  }, [editing]);
 
   const SPAN_CLASS_NAME = `${
     !textExpanded ? "max-h-30 line-clamp-3" : "max-h-none"
@@ -142,14 +147,16 @@ export const CommentWithoutAnimation = ({
                     setTextEditing(text);
                   }}
                 ></CancelButton>
-                <UpdateButton
-                  onClick={() => setEditing(false)}
-                  commentId={parentCommentId ? parentCommentId : id}
-                  replyId={parentCommentId ? id : undefined}
-                  text={textEditing}
-                  oldText={text}
-                  setText={setTextEditing}
-                ></UpdateButton>
+                <FormContextProvider>
+                  <UpdateButton
+                    commentId={parentCommentId ? parentCommentId : id}
+                    replyId={parentCommentId ? id : undefined}
+                    text={textEditing}
+                    oldText={text}
+                    setText={setTextEditing}
+                    setEditing={setEditing}
+                  ></UpdateButton>
+                </FormContextProvider>
               </div>
             )}
           </div>
@@ -225,11 +232,13 @@ export const CommentWithoutAnimation = ({
             }}
             exit={{ opacity: 0, animationDuration: 0.1 }}
           >
-            <AddReplyToComment
-              replying={true}
-              setReplying={setReplying}
-              commentId={parentCommentId ? parentCommentId : id}
-            ></AddReplyToComment>
+            <FormContextProvider>
+              <AddReplyToComment
+                replying={true}
+                setReplying={setReplying}
+                commentId={parentCommentId ? parentCommentId : id}
+              ></AddReplyToComment>
+            </FormContextProvider>
           </motion.div>
         )}
 
@@ -307,14 +316,16 @@ export const CommentWithoutAnimation = ({
                   setTextEditing(text);
                 }}
               ></CancelButton>
-              <UpdateButton
-                onClick={() => setEditing(false)}
-                commentId={parentCommentId ? parentCommentId : id}
-                replyId={parentCommentId ? id : undefined}
-                text={textEditing}
-                setText={setTextEditing}
-                oldText={text}
-              ></UpdateButton>
+              <FormContextProvider>
+                <UpdateButton
+                  commentId={parentCommentId ? parentCommentId : id}
+                  replyId={parentCommentId ? id : undefined}
+                  text={textEditing}
+                  setText={setTextEditing}
+                  setEditing={setEditing}
+                  oldText={text}
+                ></UpdateButton>
+              </FormContextProvider>
             </div>
           </div>
         </div>
@@ -403,11 +414,13 @@ export const CommentWithoutAnimation = ({
           }}
           exit={{ opacity: 0, animationDuration: 0.1 }}
         >
-          <AddReplyToComment
-            replying={true}
-            setReplying={setReplying}
-            commentId={parentCommentId ? parentCommentId : id}
-          ></AddReplyToComment>
+          <FormContextProvider>
+            <AddReplyToComment
+              replying={true}
+              setReplying={setReplying}
+              commentId={parentCommentId ? parentCommentId : id}
+            ></AddReplyToComment>
+          </FormContextProvider>
         </motion.div>
       )}
       {showModal &&
