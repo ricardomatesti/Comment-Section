@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useIsTextClamped } from "../hooks/useIsTextClamped";
 import { ReplyButton } from "./shared/ReplyButton";
@@ -16,6 +16,10 @@ import { motion } from "motion/react";
 import { UserContext } from "../contexts/userContext";
 import { Image } from "./shared/Image";
 import type { CommentType, ReplyType } from "../hooks/useCommentsStore";
+import {
+  CommentContext,
+  CommentContextProvider,
+} from "../contexts/commentContext";
 
 type Props = {
   comment: CommentType | ReplyType;
@@ -41,11 +45,13 @@ export const Comment = ({
           : {}
       }
     >
-      <CommentWithoutAnimation
-        parentCommentId={parentCommentId}
-        comment={comment}
-        isYours={isYours}
-      ></CommentWithoutAnimation>
+      <CommentContextProvider>
+        <CommentWithoutAnimation
+          parentCommentId={parentCommentId}
+          comment={comment}
+          isYours={isYours}
+        ></CommentWithoutAnimation>
+      </CommentContextProvider>
     </motion.div>
   );
 };
@@ -64,20 +70,28 @@ export const CommentWithoutAnimation = ({
     votes,
   } = comment;
 
-  // TODO mover todos los states estos a un context que esto es feísimo
-  const [textExpanded, setTextExpanded] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [replying, setReplying] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const [textEditing, setTextEditing] = useState(text);
   const { isClamped, textRef } = useIsTextClamped(text);
   const { isMobile } = useIsMobile();
   const { user } = useContext(UserContext);
+
+  const {
+    textExpanded,
+    setTextExpanded,
+    showModal,
+    setShowModal,
+    replying,
+    setReplying,
+    editing,
+    setEditing,
+    textEditing,
+    setTextEditing,
+  } = useContext(CommentContext);
 
   useEffect(() => {
     setReplying(false);
     setEditing(false);
     setTextExpanded(false);
+    setTextEditing(text);
   }, [user]);
 
   const SPAN_CLASS_NAME = `${
@@ -485,7 +499,7 @@ export const FakeComment = ({
 };
 
 export const SkeletonComment = ({
-  textSkeletonHeight = 35,
+  textSkeletonHeight = 40,
 }: {
   textSkeletonHeight?: number;
 }) => {
