@@ -32,7 +32,7 @@ export const CommentSection = () => {
         <div className="w-full min-h-16"></div>
         <div className="flex flex-col gap-4">
           <SkeletonComment
-            textSkeletonHeight={isMobile ? 25 : 35}
+            textSkeletonHeight={isMobile ? 25 : 40}
           ></SkeletonComment>
           <div className="flex flex-row">
             <div className="w-[2px] flex-[1 none] bg-gray-300 ml-4 mr-4"></div>
