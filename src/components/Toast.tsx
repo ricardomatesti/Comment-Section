@@ -15,9 +15,9 @@ export const Toast = ({ type, text, duration = 2500 }: Props) => {
   const { isMobile } = useIsMobile();
   const { setWarningMessage } = useContext(FormContext);
 
-  const MOTION_DIV_CLASSNAME = `min-w-70 w-fit max-w-100 h-min bg-white rounded-lg shadow-t-lg flex overflow-hidden absolute left-0 bottom-${
-    isMobile ? 56 : 48
-  }`;
+  const MOTION_DIV_CLASSNAME = `min-w-70 w-fit max-w-100 h-min bg-white rounded-lg shadow-t-lg flex overflow-hidden ${
+    isMobile ? "bottom-52" : "bottom-46"
+  } absolute z-20 left-0`;
 
   const handleClose = () => {
     if (type === "error") {
