@@ -118,7 +118,6 @@ export const useComments = function (): ReturnType {
     }
   };
 
-  // TODO tipar el setText
   const addComment = async ({
     setText,
     user,
@@ -159,7 +158,6 @@ export const useComments = function (): ReturnType {
     } else {
       setComments((prev) => [...prev.slice(0, -1), res.data]);
       setText(text); //si el enviar comentario falla que no tenga que escribir el comentario de nuevo
-      // TODO: Añadir aviso de que no se pudo guardar el comentario
     }
   };
 
