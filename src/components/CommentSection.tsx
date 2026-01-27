@@ -1,19 +1,12 @@
 import { useContext, useEffect, useRef } from "react";
 import { useIsMobile } from "../hooks/useIsMobile";
-import { Comment } from "./Comment";
+import { Comment, FakeComment, SkeletonComment } from "./Comment";
 import { useCommentsStore } from "../hooks/useCommentsStore";
 import { UserContext } from "../contexts/userContext";
 import { AnimatePresence } from "motion/react";
 import { Toast } from "./Toast";
 import { createPortal } from "react-dom";
-import { Image } from "./shared/Image";
-
-type User = {
-  id: number;
-  name: string;
-  photo_url: string;
-  email: string;
-};
+import { ReplyList } from "./ReplyList";
 
 export const CommentSection = () => {
   const { isMobile } = useIsMobile();
@@ -85,21 +78,15 @@ export const CommentSection = () => {
                   ref={comment.id === commentToScrollId ? commentRef : null}
                 >
                   <Comment
-                    id={comment.id}
-                    text={comment.text}
-                    imgUrl={comment.user_photo_url}
-                    date={comment.date}
-                    userName={comment.user_name}
-                    votes={comment.votes}
+                    comment={comment}
                     isYours={comment.user === userSignedUp.id}
-                    optimisticComment={comment.optimistic_comment}
                   ></Comment>
-                  <RepliesToThisComment
+                  <ReplyList
                     parentCommentId={comment.id}
                     isMobile={isMobile}
                     replies={comment.replies}
                     userSignedUp={userSignedUp}
-                  ></RepliesToThisComment>
+                  ></ReplyList>
                 </div>
               );
             })}
@@ -128,21 +115,15 @@ export const CommentSection = () => {
                 ref={comment.id === commentToScrollId ? commentRef : null}
               >
                 <Comment
-                  id={comment.id}
-                  text={comment.text}
-                  imgUrl={comment.user_photo_url}
-                  date={comment.date}
-                  userName={comment.user_name}
-                  votes={comment.votes}
+                  comment={comment}
                   isYours={comment.user === userSignedUp.id}
-                  optimisticComment={comment.optimistic_comment}
                 ></Comment>
-                <RepliesToThisComment
+                <ReplyList
                   parentCommentId={comment.id}
                   isMobile={isMobile}
                   replies={comment.replies}
                   userSignedUp={userSignedUp}
-                ></RepliesToThisComment>
+                ></ReplyList>
               </div>
             );
           })}
@@ -154,262 +135,6 @@ export const CommentSection = () => {
           <Toast type="error" text={error}></Toast>,
           document.getElementById("app-wraper") ?? document.body
         )}
-    </div>
-  );
-};
-
-type RepliesProps = {
-  parentCommentId: number;
-  isMobile: boolean;
-  replies: Reply[];
-  userSignedUp: User;
-};
-
-type Reply = {
-  date: string;
-  id: number;
-  text: string;
-  user: number;
-  user_name: string;
-  votes: number;
-  user_photo_url: string;
-  optimistic_comment?: boolean;
-};
-
-const RepliesToThisComment = ({
-  parentCommentId,
-  isMobile,
-  replies,
-  userSignedUp,
-}: RepliesProps) => {
-  if (replies.length === 0) return;
-
-  if (isMobile) {
-    return (
-      <div className="flex flex-row">
-        <div className="w-[2px] flex-[1 none] bg-gray-300 ml-4 mr-4"></div>
-        <div className="flex flex-col gap-4 grow">
-          <AnimatePresence>
-            {replies.map((reply) => {
-              return (
-                <Comment
-                  key={reply.id}
-                  id={reply.id}
-                  parentCommentId={parentCommentId}
-                  text={reply.text}
-                  imgUrl={reply.user_photo_url}
-                  date={reply.date}
-                  userName={reply.user_name}
-                  votes={reply.votes}
-                  isYours={reply.user === userSignedUp.id}
-                  optimisticComment={reply.optimistic_comment}
-                ></Comment>
-              );
-            })}
-          </AnimatePresence>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-row">
-      <div className="w-[2px] flex-[1 none] bg-gray-300 ml-10 mr-10"></div>
-      <div className="flex flex-col gap-4 grow">
-        <AnimatePresence>
-          {replies.map((reply) => {
-            return (
-              <Comment
-                key={reply.id}
-                id={reply.id}
-                parentCommentId={parentCommentId}
-                text={reply.text}
-                imgUrl={reply.user_photo_url}
-                date={reply.date}
-                userName={reply.user_name}
-                votes={reply.votes}
-                isYours={reply.user === userSignedUp.id}
-                optimisticComment={reply.optimistic_comment}
-              ></Comment>
-            );
-          })}
-        </AnimatePresence>
-      </div>
-    </div>
-  );
-};
-
-export const FakeComment = ({
-  imgUrl,
-  userName,
-  isMobile,
-}: {
-  imgUrl: string;
-  userName: string;
-  isMobile: boolean;
-}) => {
-  if (isMobile) {
-    return (
-      <div className="flex flex-col">
-        <div className="bg-white min-h-fit-content flex-initial max-h-min flex flex-col rounded-lg gap-4 p-4 relative">
-          <div className="flex flex-row justify items-center gap-4">
-            <Image src={imgUrl}></Image>
-            <div className="flex flex-row items-center gap-2">
-              <span className="text-lg  text-gray-500 font-bold line-clamp-1">
-                {userName}
-              </span>
-
-              <div className="bg-(--purple-600) px-2 py-0 rounded-sm items-center flex flex-row">
-                <span className="text-sm text-white">you</span>
-              </div>
-            </div>
-            <span className="text-gray-500">Today</span>
-          </div>
-
-          <span
-            className={
-              "max-h-30 line-clamp-3 text-start text-md  text-gray-500"
-            }
-          >
-            This could be your first comment!
-          </span>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col">
-      <div
-        className="bg-white min-h-fit-content flex-initial 
- max-h-100 flex flex-row gap-10 rounded-lg p-6 relative"
-      >
-        <div className="flex flex-col flex-1 w-100 gap-4">
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-row justify items-center gap-4">
-              <Image src={imgUrl}></Image>
-              <div className="flex flex-row items-center gap-2">
-                <span className="text-lg text-gray-500 font-bold line-clamp-1">
-                  {userName}
-                </span>
-
-                <div className="bg-(--purple-600) px-2 py-0 rounded-sm items-center flex flex-row">
-                  <span className="text-sm  text-white">you</span>
-                </div>
-              </div>
-              <span className=" text-gray-500">Today</span>
-            </div>
-          </div>
-
-          <span
-            className={
-              "max-h-30 line-clamp-3 text-start text-md  text-gray-500"
-            }
-          >
-            This could be your first comment
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const SkeletonComment = ({
-  textSkeletonHeight = 35,
-}: {
-  textSkeletonHeight?: number;
-}) => {
-  const { isMobile } = useIsMobile();
-
-  if (isMobile) {
-    return (
-      <div className="flex flex-col">
-        <div className="bg-white min-h-fit-content flex-initial max-h-min flex flex-col rounded-lg gap-4 p-4 relative">
-          <div className="flex flex-row justify items-center gap-4">
-            <div
-              className={`w-10 h-10 rounded-[50%] bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
-            />
-            <div className="flex flex-row items-center gap-2">
-              <div
-                className={`w-35 h-10 rounded-lg bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
-              />
-            </div>
-          </div>
-
-          <div
-            className={`rounded-lg w-full h-${textSkeletonHeight} bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
-          ></div>
-          <div className="flex flex-row justify-between">
-            <VotesSkeleton orientation="horizontal"></VotesSkeleton>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col basis-full">
-      <div
-        className="bg-white min-h-fit-content flex-initial 
- max-h-100 flex flex-row gap-10 rounded-lg p-6 relative"
-      >
-        <VotesSkeleton orientation="vertical"></VotesSkeleton>
-
-        <div className="flex flex-col flex-1 w-100 gap-4">
-          <div className="flex flex-row justify-between">
-            <div className="flex flex-row justify items-center gap-4">
-              <div
-                className={`w-10 h-10 rounded-[50%] bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
-              />
-              <div className="flex flex-row items-center gap-2">
-                <div
-                  className={`w-35 h-10 rounded-lg bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div
-            className={`rounded-lg w-full h-${textSkeletonHeight} bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
-          ></div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-type VotesProp = {
-  orientation: "horizontal" | "vertical";
-};
-
-const VotesSkeleton = ({ orientation }: VotesProp) => {
-  if (orientation === "horizontal") {
-    return (
-      <div className="h-10 w-25 bg-(--purple-100) rounded-lg flex-none flex flex-row items-center justify-between">
-        <button className="w-8 h-8 cursor-pointer text-(--purple-400) text-lg font-bold">
-          +
-        </button>
-        <div
-          className={`w-8 h-6 rounded-lg bg-(--purple-200) animate-pulse duration-50 from-(--purple-400) via-(--purple-200) to-(--purple-400) `}
-        />
-        <button className="w-8 h-8 cursor-pointer text-(--purple-400) font-bold">
-          <span className="text-lg scale-x-200">-</span>
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="h-25 w-10 bg-(--purple-100) rounded-lg flex-none flex flex-col items-center justify-between">
-      <button className="w-8 h-8 cursor-pointer text-(--purple-400) text-lg font-bold">
-        +
-      </button>
-      <div
-        className={`w-6 h-8 rounded-lg bg-(--purple-200) animate-pulse duration-50 from-(--purple-400) via-(--purple-200) to-(--purple-400) `}
-      />
-      <button className="w-8 h-8 cursor-pointer text-(--purple-400) font-bold">
-        <span className="text-lg scale-x-200">-</span>
-      </button>
     </div>
   );
 };

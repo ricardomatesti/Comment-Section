@@ -5,7 +5,7 @@ import { useState } from "react";
 import { UserContext } from "../contexts/userContext";
 import { Image } from "./shared/Image";
 
-export const ReplyToComment = ({
+export const AddReplyToComment = ({
   commentId,
   replying,
   setReplying,

@@ -5,41 +5,31 @@ import { ReplyButton } from "./shared/ReplyButton";
 import { Votes } from "./shared/Votes";
 import { ReadMoreButton } from "./shared/ReadMoreButton";
 import { formatDateToText } from "../utils/utils";
-import { ReplyToComment } from "./ReplyToComment";
+import { AddReplyToComment } from "./AddReplyToComment";
 import { DeleteButton } from "./shared/DeleteButton";
 import { EditButton } from "./shared/EditButton";
 import { createPortal } from "react-dom";
-import { DeleteCommentModal } from "./DeleteCommentModal";
+import { DeleteCommentModal } from "./Modals/DeleteCommentModal";
 import { UpdateButton } from "./shared/UpdateButton";
 import { CancelButton } from "./shared/CancelButton";
 import { motion } from "motion/react";
 import { UserContext } from "../contexts/userContext";
 import { Image } from "./shared/Image";
+import type { CommentType, ReplyType } from "../hooks/useCommentsStore";
 
 type Props = {
-  id: number;
+  comment: CommentType | ReplyType;
   parentCommentId?: number;
-  text: string;
-  imgUrl: string;
-  date: string;
-  userName: string;
-  votes: number;
-  isYours?: boolean;
-  optimisticComment?: boolean;
+  isYours: boolean;
 };
 
 export const Comment = ({
-  // TODO pasar el comment entero en vez de cada prop xD
-  id,
   parentCommentId,
-  text,
-  imgUrl,
-  date,
-  userName,
-  votes,
+  comment,
   isYours = false,
-  optimisticComment = false,
 }: Props) => {
+  const { id, optimistic_comment: optimisticComment } = comment;
+
   return (
     <motion.div
       key={id + " - " + parentCommentId}
@@ -52,13 +42,8 @@ export const Comment = ({
       }
     >
       <CommentWithoutAnimation
-        id={id}
         parentCommentId={parentCommentId}
-        text={text}
-        imgUrl={imgUrl}
-        date={date}
-        userName={userName}
-        votes={votes}
+        comment={comment}
         isYours={isYours}
       ></CommentWithoutAnimation>
     </motion.div>
@@ -66,16 +51,19 @@ export const Comment = ({
 };
 
 export const CommentWithoutAnimation = ({
-  // TODO pasar el comment entero en vez de cada prop xD
-  id,
   parentCommentId,
-  text,
-  imgUrl,
-  date,
-  userName,
-  votes,
+  comment,
   isYours = false,
 }: Props) => {
+  const {
+    id,
+    text,
+    user_photo_url: imgUrl,
+    date,
+    user_name: userName,
+    votes,
+  } = comment;
+
   // TODO mover todos los states estos a un context que esto es feísimo
   const [textExpanded, setTextExpanded] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -223,11 +211,11 @@ export const CommentWithoutAnimation = ({
             }}
             exit={{ opacity: 0, animationDuration: 0.1 }}
           >
-            <ReplyToComment
+            <AddReplyToComment
               replying={true}
               setReplying={setReplying}
               commentId={parentCommentId ? parentCommentId : id}
-            ></ReplyToComment>
+            ></AddReplyToComment>
           </motion.div>
         )}
 
@@ -401,11 +389,11 @@ export const CommentWithoutAnimation = ({
           }}
           exit={{ opacity: 0, animationDuration: 0.1 }}
         >
-          <ReplyToComment
+          <AddReplyToComment
             replying={true}
             setReplying={setReplying}
             commentId={parentCommentId ? parentCommentId : id}
-          ></ReplyToComment>
+          ></AddReplyToComment>
         </motion.div>
       )}
       {showModal &&
@@ -417,6 +405,181 @@ export const CommentWithoutAnimation = ({
           />,
           document.getElementById("root") ?? document.body
         )}
+    </div>
+  );
+};
+
+export const FakeComment = ({
+  imgUrl,
+  userName,
+  isMobile,
+}: {
+  imgUrl: string;
+  userName: string;
+  isMobile: boolean;
+}) => {
+  if (isMobile) {
+    return (
+      <div className="flex flex-col">
+        <div className="bg-white min-h-fit-content flex-initial max-h-min flex flex-col rounded-lg gap-4 p-4 relative">
+          <div className="flex flex-row justify items-center gap-4">
+            <Image src={imgUrl}></Image>
+            <div className="flex flex-row items-center gap-2">
+              <span className="text-lg  text-gray-500 font-bold line-clamp-1">
+                {userName}
+              </span>
+
+              <div className="bg-(--purple-600) px-2 py-0 rounded-sm items-center flex flex-row">
+                <span className="text-sm text-white">you</span>
+              </div>
+            </div>
+            <span className="text-gray-500">Today</span>
+          </div>
+
+          <span
+            className={
+              "max-h-30 line-clamp-3 text-start text-md  text-gray-500"
+            }
+          >
+            This could be your first comment!
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col">
+      <div
+        className="bg-white min-h-fit-content flex-initial 
+ max-h-100 flex flex-row gap-10 rounded-lg p-6 relative"
+      >
+        <div className="flex flex-col flex-1 w-100 gap-4">
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify items-center gap-4">
+              <Image src={imgUrl}></Image>
+              <div className="flex flex-row items-center gap-2">
+                <span className="text-lg text-gray-500 font-bold line-clamp-1">
+                  {userName}
+                </span>
+
+                <div className="bg-(--purple-600) px-2 py-0 rounded-sm items-center flex flex-row">
+                  <span className="text-sm  text-white">you</span>
+                </div>
+              </div>
+              <span className=" text-gray-500">Today</span>
+            </div>
+          </div>
+
+          <span
+            className={
+              "max-h-30 line-clamp-3 text-start text-md  text-gray-500"
+            }
+          >
+            This could be your first comment
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const SkeletonComment = ({
+  textSkeletonHeight = 35,
+}: {
+  textSkeletonHeight?: number;
+}) => {
+  const { isMobile } = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <div className="flex flex-col">
+        <div className="bg-white min-h-fit-content flex-initial max-h-min flex flex-col rounded-lg gap-4 p-4 relative">
+          <div className="flex flex-row justify items-center gap-4">
+            <div
+              className={`w-10 h-10 rounded-[50%] bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+            />
+            <div className="flex flex-row items-center gap-2">
+              <div
+                className={`w-35 h-10 rounded-lg bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+              />
+            </div>
+          </div>
+
+          <div
+            className={`rounded-lg w-full h-${textSkeletonHeight} bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+          ></div>
+          <div className="flex flex-row justify-between">
+            <VotesSkeleton orientation="horizontal"></VotesSkeleton>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col basis-full">
+      <div
+        className="bg-white min-h-fit-content flex-initial 
+ max-h-100 flex flex-row gap-10 rounded-lg p-6 relative"
+      >
+        <VotesSkeleton orientation="vertical"></VotesSkeleton>
+
+        <div className="flex flex-col flex-1 w-100 gap-4">
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify items-center gap-4">
+              <div
+                className={`w-10 h-10 rounded-[50%] bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+              />
+              <div className="flex flex-row items-center gap-2">
+                <div
+                  className={`w-35 h-10 rounded-lg bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            className={`rounded-lg w-full h-${textSkeletonHeight} bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
+          ></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const VotesSkeleton = ({
+  orientation,
+}: {
+  orientation: "horizontal" | "vertical";
+}) => {
+  if (orientation === "horizontal") {
+    return (
+      <div className="h-10 w-25 bg-(--purple-100) rounded-lg flex-none flex flex-row items-center justify-between">
+        <button className="w-8 h-8 cursor-pointer text-(--purple-400) text-lg font-bold">
+          +
+        </button>
+        <div
+          className={`w-8 h-6 rounded-lg bg-(--purple-200) animate-pulse duration-50 from-(--purple-400) via-(--purple-200) to-(--purple-400) `}
+        />
+        <button className="w-8 h-8 cursor-pointer text-(--purple-400) font-bold">
+          <span className="text-lg scale-x-200">-</span>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-25 w-10 bg-(--purple-100) rounded-lg flex-none flex flex-col items-center justify-between">
+      <button className="w-8 h-8 cursor-pointer text-(--purple-400) text-lg font-bold">
+        +
+      </button>
+      <div
+        className={`w-6 h-8 rounded-lg bg-(--purple-200) animate-pulse duration-50 from-(--purple-400) via-(--purple-200) to-(--purple-400) `}
+      />
+      <button className="w-8 h-8 cursor-pointer text-(--purple-400) font-bold">
+        <span className="text-lg scale-x-200">-</span>
+      </button>
     </div>
   );
 };

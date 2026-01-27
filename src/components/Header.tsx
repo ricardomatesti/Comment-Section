@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { createPortal } from "react-dom";
-import { SwitchUserModal } from "./SwitchUserModal";
+import { SwitchUserModal } from "./Modals/SwitchUserModal";
 import { UserContext } from "../contexts/userContext";
 import { Image } from "./shared/Image";
 import useIsMobile from "../hooks/useIsMobile";

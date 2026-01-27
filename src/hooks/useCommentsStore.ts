@@ -11,11 +11,11 @@ export type CommentType = {
   user_name: string;
   user_photo_url: string;
   votes: number;
-  replies: Reply[];
+  replies: ReplyType[];
   optimistic_comment?: boolean;
 };
 
-export type Reply = {
+export type ReplyType = {
   date: string;
   id: number;
   text: string;
@@ -246,7 +246,7 @@ export const useCommentsStore = create<CommentsState>((set) => ({
     setReplying: React.Dispatch<React.SetStateAction<boolean>>;
   }) => {
     const temporalId = Date.now(); // ID temporal
-    const optimisticReply: Reply = {
+    const optimisticReply: ReplyType = {
       id: temporalId,
       text: text,
       date: Date(),

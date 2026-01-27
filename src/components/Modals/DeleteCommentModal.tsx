@@ -1,5 +1,5 @@
 import { type Dispatch, type SetStateAction } from "react";
-import { useCommentsStore } from "../hooks/useCommentsStore";
+import { useCommentsStore } from "../../hooks/useCommentsStore";
 
 export const DeleteCommentModal = ({
   onClose,
