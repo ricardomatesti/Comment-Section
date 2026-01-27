@@ -1,8 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useContext } from "react";
 import { FormContext } from "../../contexts/formContext";
-import { createPortal } from "react-dom";
-import { Toast } from "../Toast";
 
 type Props = {
   commentId: number;
@@ -24,7 +22,7 @@ export const UpdateButton = ({
 }: Props) => {
   const { updateComment, updateReply } = useCommentsStore();
 
-  const { setWarningMessage, warningMessage } = useContext(FormContext);
+  const { setWarningMessage } = useContext(FormContext);
 
   const handleUpdate = () => {
     if (text.trim() === "") {
@@ -48,20 +46,13 @@ export const UpdateButton = ({
   };
 
   return (
-    <>
-      <button
-        className="bg-(--purple-600) border rounded-md h-10 px-6 text-white cursor-pointer active:opacity-50 font-medium"
-        onClick={() => {
-          handleUpdate();
-        }}
-      >
-        UPDATE
-      </button>
-      {warningMessage !== "" &&
-        createPortal(
-          <Toast type="warning" text={warningMessage}></Toast>,
-          document.getElementById("app-wraper") ?? document.body
-        )}
-    </>
+    <button
+      className="bg-(--purple-600) border rounded-md h-10 px-6 text-white cursor-pointer active:opacity-50 font-medium"
+      onClick={() => {
+        handleUpdate();
+      }}
+    >
+      UPDATE
+    </button>
   );
 };

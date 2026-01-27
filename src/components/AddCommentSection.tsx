@@ -3,8 +3,6 @@ import { useContext, type FormEvent } from "react";
 import { useCommentsStore } from "../hooks/useCommentsStore";
 import { UserContext } from "../contexts/userContext";
 import { FormContext } from "../contexts/formContext";
-import { Toast } from "./Toast";
-import { createPortal } from "react-dom";
 import { Image } from "./shared/Image";
 
 export const AddCommentSection = () => {
@@ -12,8 +10,7 @@ export const AddCommentSection = () => {
   const { user } = useContext(UserContext);
   const { addComment } = useCommentsStore();
 
-  const { text, setText, setWarningMessage, warningMessage } =
-    useContext(FormContext);
+  const { text, setText, setWarningMessage } = useContext(FormContext);
 
   const handleSubmit = ({ e }: { e: FormEvent }) => {
     e.preventDefault();
@@ -53,11 +50,6 @@ export const AddCommentSection = () => {
             </button>
           </div>
         </form>
-        {warningMessage !== "" &&
-          createPortal(
-            <Toast type="warning" text={warningMessage}></Toast>,
-            document.getElementById("app-wraper") ?? document.body
-          )}
       </div>
     );
   }
@@ -83,11 +75,6 @@ export const AddCommentSection = () => {
           SEND
         </button>
       </form>
-      {warningMessage !== "" &&
-        createPortal(
-          <Toast type="warning" text={warningMessage}></Toast>,
-          document.getElementById("app-wraper") ?? document.body
-        )}
     </div>
   );
 };
