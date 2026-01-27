@@ -1,8 +1,8 @@
 import { useContext, type Dispatch, type SetStateAction } from "react";
-import type { User } from "../hooks/useUsers";
-import { UserContext } from "../contexts/userContext";
-import { Image } from "./shared/Image";
-import useIsMobile from "../hooks/useIsMobile";
+import type { User } from "../../hooks/useUsers";
+import { UserContext } from "../../contexts/userContext";
+import { Image } from "../shared/Image";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const users = [
   {
