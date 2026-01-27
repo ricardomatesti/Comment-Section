@@ -7,7 +7,7 @@ export const UserContext = createContext<{
   setUser: Dispatch<SetStateAction<User>>;
 }>({
   user: {
-    id: 2,
+    id: 1,
     name: "Peter Griffin",
     photo_url:
       "https://imagedelivery.net/LBWXYQ-XnKSYxbZ-NuYGqQ/f69f1ba2-802c-4160-b24f-e54c5cffc200/avatarhd",
@@ -22,7 +22,7 @@ export function UserProvider({
   children: ReactNode | ReactNode[];
 }) {
   const [user, setUser] = useState({
-    id: 2,
+    id: 1,
     name: "Peter Griffin",
     photo_url:
       "https://imagedelivery.net/LBWXYQ-XnKSYxbZ-NuYGqQ/f69f1ba2-802c-4160-b24f-e54c5cffc200/avatarhd",
