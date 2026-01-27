@@ -11,7 +11,7 @@ export const Image = ({ src, className, h = 10, w = 10 }: Props) => {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div className="shrink-0">
+    <div className="shrink-0 w-fit">
       {!loaded && (
         <div
           className={`w-${w} h-${h} rounded-[50%] bg-slate-200 animate-pulse duration-50 from-slate-200 via-slate-300 to-slate-200`}
@@ -19,8 +19,8 @@ export const Image = ({ src, className, h = 10, w = 10 }: Props) => {
       )}
       <img
         src={src}
-        className={`transition-opacity duration-200 w-${w} h-${h} rounded-[50%] ${className} ${
-          loaded ? "opacity-100" : "opacity-0"
+        className={`transition-opacity duration-200 rounded-[50%] ${className} ${
+          loaded ? `opacity-100 w-${w} h-${h}` : "opacity-0 w-0 h-0"
         }`}
         onLoad={() => setLoaded(true)}
       />
