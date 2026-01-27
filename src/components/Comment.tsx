@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useIsTextClamped } from "../hooks/useIsTextClamped";
 import { ReplyButton } from "./shared/ReplyButton";
