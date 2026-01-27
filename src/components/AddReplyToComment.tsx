@@ -1,8 +1,6 @@
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useContext, type FormEvent } from "react";
 import { useCommentsStore } from "../hooks/useCommentsStore";
-import { createPortal } from "react-dom";
-import { Toast } from "./Toast";
 import { UserContext } from "../contexts/userContext";
 import { FormContext } from "../contexts/formContext";
 import { Image } from "./shared/Image";
@@ -20,8 +18,7 @@ export const AddReplyToComment = ({
   const { addReply } = useCommentsStore();
   const { user } = useContext(UserContext);
 
-  const { text, setText, setWarningMessage, warningMessage } =
-    useContext(FormContext);
+  const { text, setText, setWarningMessage } = useContext(FormContext);
 
   const handleSubmit = ({ e }: { e: FormEvent }) => {
     e.preventDefault();
@@ -62,11 +59,6 @@ export const AddReplyToComment = ({
             </button>
           </div>
         </form>
-        {warningMessage !== "" &&
-          createPortal(
-            <Toast type="warning" text={warningMessage}></Toast>,
-            document.getElementById("app-wraper") ?? document.body
-          )}
       </div>
     );
   }
@@ -91,11 +83,6 @@ export const AddReplyToComment = ({
           REPLY
         </button>
       </form>
-      {warningMessage !== "" &&
-        createPortal(
-          <Toast type="warning" text={warningMessage}></Toast>,
-          document.getElementById("app-wraper") ?? document.body
-        )}
     </div>
   );
 };

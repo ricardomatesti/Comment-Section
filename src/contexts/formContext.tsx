@@ -1,4 +1,6 @@
 import { createContext, useState } from "react";
+import { createPortal } from "react-dom";
+import { Toast } from "../components/Toast";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 
 export const FormContext = createContext<{
@@ -24,6 +26,11 @@ export function FormContextProvider({
   return (
     <FormContext value={{ text, setText, warningMessage, setWarningMessage }}>
       {children}
+      {warningMessage !== "" &&
+        createPortal(
+          <Toast type="warning" text={warningMessage}></Toast>,
+          document.getElementById("app-wraper") ?? document.body
+        )}
     </FormContext>
   );
 }
