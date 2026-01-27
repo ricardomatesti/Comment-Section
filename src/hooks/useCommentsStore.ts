@@ -1,5 +1,6 @@
 import { type User } from "./useUsers";
 import { create } from "zustand";
+import type { Dispatch, SetStateAction } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -39,7 +40,7 @@ interface CommentsState {
   setError: ({ error }: { error: string }) => void;
   fetchComments: () => Promise<void>;
   addComment: (params: {
-    setText: (t: string) => void;
+    setText: Dispatch<SetStateAction<string>>;
     user: User;
     text: string;
   }) => Promise<void>;
@@ -50,7 +51,7 @@ interface CommentsState {
     commentId,
     setReplying,
   }: {
-    setText: any; //TODO tipar
+    setText: Dispatch<SetStateAction<string>>;
     user: User;
     text: string;
     commentId: number;
@@ -73,7 +74,7 @@ interface CommentsState {
     commentId: number;
     text: string;
     oldText: string;
-    setText: any;
+    setText: Dispatch<SetStateAction<string>>;
   }) => void;
   updateReply: ({
     commentId,
@@ -86,7 +87,7 @@ interface CommentsState {
     replyId: number;
     text: string;
     oldText: string;
-    setText: any;
+    setText: Dispatch<SetStateAction<string>>;
   }) => void;
   changeCommentVotes: ({
     commentId,
@@ -152,7 +153,7 @@ export const useCommentsStore = create<CommentsState>((set) => ({
     user,
     text,
   }: {
-    setText: any;
+    setText: Dispatch<SetStateAction<string>>;
     user: User;
     text: string;
   }) => {
@@ -239,7 +240,7 @@ export const useCommentsStore = create<CommentsState>((set) => ({
     commentId,
     setReplying,
   }: {
-    setText: any;
+    setText: Dispatch<SetStateAction<string>>;
     user: User;
     text: string;
     commentId: number;
@@ -410,7 +411,7 @@ export const useCommentsStore = create<CommentsState>((set) => ({
     commentId: number;
     text: string;
     oldText: string;
-    setText: any;
+    setText: Dispatch<SetStateAction<string>>;
   }) => {
     try {
       const response = await fetch(`${API_URL}/api/comment/${commentId}/`, {
@@ -456,7 +457,7 @@ export const useCommentsStore = create<CommentsState>((set) => ({
     replyId: number;
     text: string;
     oldText: string;
-    setText: any;
+    setText: Dispatch<SetStateAction<string>>;
   }) => {
     try {
       const response = await fetch(`${API_URL}/api/reply/${replyId}/`, {
